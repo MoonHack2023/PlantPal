@@ -1,0 +1,131 @@
+{% extends 'blog/basic.html'%}
+
+{%block scripts%}
+<script>
+// jquery function
+$(document).ready(function(){
+    var tem = document.getElementById('tempChart').getContext('2d');
+    var tempChart = new Chart(tem, {
+        type: 'line',
+        data: {
+            labels: [{%for datat in qst%}'{{datat.time}}',{%endfor%}], //loop through queryset, 
+            datasets: [{
+                    label: 'Temperature',
+                    data: [{%for datat in qst%}{{datat.temp}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(67,141,237,1)',
+                    borderColor: 'rgba(67,141,237,1)',
+                    tension: 0
+            }
+        ]},
+        // add text to the axis label of chart.js graph
+        options: {
+            title: {
+                display: true,
+                text: 'Temperature'
+            },
+            legend: {
+               display: false
+            },   
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Temperature (°C)'
+                    }
+                }],
+                // display name of label on the axis
+                xAxes: [{ 
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date and Time'
+                    }
+                }]
+            },
+            
+        }
+    });
+    var hum = document.getElementById('humidChart').getContext('2d');
+    var humidChart = new Chart(hum, {
+        type: 'line',
+        data: {
+            labels: [{%for datah in qsh%}'{{datah.time}}',{%endfor%}], //loop through queryset, 
+            datasets: [
+            {
+                    label: 'Humidity',
+                    display: false,
+                    data: [{%for datah in qsh%}{{datah.humidity}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(255,95,95,1)',
+                    borderColor: 'rgba(255,95,95,1)',
+                    tension: 0
+            }
+        ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Humidity'
+            },
+            legend: {
+               display: false
+            },   
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Humidity (%)'
+                    }
+                }],
+                // display name of label on the axis
+                xAxes: [{ 
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date and Time'
+                    }
+                }]
+            }
+        }
+    },
+    );
+});
+
+
+</script>
+{%endblock scripts%}
+
+{%block content%}
+<!-- displaying the chart -->
+<!-- you can also play around with the width and height to increase or decrease the chart size -->
+<style>
+    .column {
+        float: left;
+        width: 50%;
+      }
+      
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+
+<div class="row">
+    <div class="column">
+        <canvas id="tempChart" width="400" height="auto"></canvas> 
+    </div>
+    <div class="column">
+        <canvas id="humidChart" width="400" height="auto"></canvas>  
+    </div>
+  </div>
+
+<script>
+    window.setInterval('refresh()', 60002); 	// Call a function every 10000 milliseconds (OR 10 seconds).
+
+    function refresh() {
+        window.location.reload();
+    }
+</script>
+
+{%endblock content%}

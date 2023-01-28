@@ -27,7 +27,7 @@ class Command(BaseCommand):
                 # print("Before change map_info:",humidity.objects.all().values())
                 tmp_var.save()
                 hum_var.save()
-                time.sleep(60)
+                time.sleep(2)
             # print("after change:",humidity.objects.all().values())
 
 

@@ -13,13 +13,13 @@ from django.utils import timezone
 
 class temp(models.Model):
     time = models.DateTimeField(primary_key=True, auto_now=True)
-    temp = models.IntegerField()
+    temp = models.FloatField()
     class Meta:
         ordering = ('time',)
 
 class humidity(models.Model):
     time = models.DateTimeField(primary_key=True, auto_now=True)
-    humidity = models.IntegerField()
+    humidity = models.FloatField()
     class Meta:
         ordering = ('time',)
 

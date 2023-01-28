@@ -6,10 +6,10 @@
 
 import socket
 import time
-print("We're in tcp client...");
+print("We're in tcp client... on PC/website")
 
 #the server name and port client wishes to access
-server_name = 'localhost'
+server_name =  "192.168.1.60"  #rasp pi addr  #'localhost'
 server_port = 12008
 
 
@@ -21,8 +21,8 @@ while True:
 
     #return values from the server
     msg = client_socket.recv(1024)
-    print(msg.decode())
+    print(msg.decode(),  " from pi ")
     f = open("blog/text_files/temphum.txt", "w")
     f.write(msg.decode())
-    time.sleep(20)
+    time.sleep(2)
 

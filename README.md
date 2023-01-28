@@ -9,8 +9,8 @@ First clear the database with `bash clear.sh` or `python3 manage.py clear`
 Then use the following commands.
 ```
 python3 manage.py runserver
-python3 tcp_server.py
-python3 tcp_client.py
+python3 mqtt_publisher.py
+python3 mqtt_client.py
 python3 manage.py updatemodels
 ```
 

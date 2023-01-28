@@ -22,7 +22,7 @@ while True:
     #return values from the server
     msg = client_socket.recv(1024)
     print(msg.decode(),  " from pi ")
-    f = open("blog/text_files/temphum.txt", "w")
+    f = open("blog/text_files/thsensor.txt", "w")
     f.write(msg.decode())
     time.sleep(2)
 

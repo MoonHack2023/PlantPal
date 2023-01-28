@@ -16,7 +16,7 @@ class Command(BaseCommand):
         #pass in every single element in sequence from this.
         # temp.objects.all().delete() 
         while True:
-            f = open("blog/text_files/temphum.txt", "r")
+            f = open("blog/text_files/thsensor.txt", "r")
             # print(f.readline())
             # if (len(f.readline())> 0):
             th = f.readline()

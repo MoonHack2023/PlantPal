@@ -30,7 +30,7 @@ python3 manage.py runserver
 Open 2 Raspberry Pi terminals and run the following:
 
 ```
-python3 tcp_server.py
+python3 tcp_server_in_pi.py
 python3 sensors.py
 ```
 

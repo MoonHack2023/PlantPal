@@ -1,5 +1,5 @@
 # import sqlite3
-from blog.models import temp, humidity
+from blog.models import temp, humidity, co2, tvoc
 from django.core.management.base import BaseCommand
 import datetime
 import time
@@ -24,9 +24,13 @@ class Command(BaseCommand):
                 splitth = th.split(",")
                 tmp_var = temp(temp=splitth[0])
                 hum_var = humidity(humidity=splitth[1])
+                tv_var = tvoc(tvoc=splitth[2])
+                co_var = co2(co2=splitth[3])
                 # print("Before change map_info:",humidity.objects.all().values())
                 tmp_var.save()
                 hum_var.save()
+                tv_var.save()
+                co_var.save()
                 time.sleep(2)
             # print("after change:",humidity.objects.all().values())
 

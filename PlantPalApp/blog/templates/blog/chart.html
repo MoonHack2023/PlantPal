@@ -88,6 +88,92 @@ $(document).ready(function(){
         }
     },
     );
+
+    var tvoc = document.getElementById('tvocChart').getContext('2d');
+    var tvocChart = new Chart(tvoc, {
+        type: 'line',
+        data: {
+            labels: [{%for datatv in qstvoc%}'{{datatv.time}}',{%endfor%}], //loop through queryset, 
+            datasets: [{
+                    label: 'Temperature',
+                    data: [{%for datatv in qstvoc%}{{datatv.tvoc}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(50, 168, 84,1)',
+                    borderColor: 'rgba(50, 168, 84,1)',
+                    tension: 0
+            }
+        ]},
+        // add text to the axis label of chart.js graph
+        options: {
+            title: {
+                display: true,
+                text: 'TVOC'
+            },
+            legend: {
+               display: false
+            },   
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'TVOC (°C)'
+                    }
+                }],
+                // display name of label on the axis
+                xAxes: [{ 
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date and Time'
+                    }
+                }]
+            },
+            
+        }
+    });
+
+    var co2 = document.getElementById('CO2Chart').getContext('2d');
+    var CO2Chart = new Chart(co2, {
+        type: 'line',
+        data: {
+            labels: [{%for datac in qsco2%}'{{datac.time}}',{%endfor%}], //loop through queryset, 
+            datasets: [{
+                    label: 'CO2',
+                    data: [{%for datac in qsco2%}{{datac.co2}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(211, 161, 255,1)',
+                    borderColor: 'rgba(211, 161, 255,1)',
+                    tension: 0
+            }
+        ]},
+        // add text to the axis label of chart.js graph
+        options: {
+            title: {
+                display: true,
+                text: 'CO2'
+            },
+            legend: {
+               display: false
+            },   
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'CO2 (%)'
+                    }
+                }],
+                // display name of label on the axis
+                xAxes: [{ 
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date and Time'
+                    }
+                }]
+            },
+            
+        }
+    });
+
+
 });
 
 
@@ -110,15 +196,29 @@ $(document).ready(function(){
         clear: both;
     }
 </style>
-
-<div class="row">
-    <div class="column">
+<div class="column">
+    <div class="row">
         <canvas id="tempChart" width="400" height="auto"></canvas> 
     </div>
-    <div class="column">
+    <div class="row">
         <canvas id="humidChart" width="400" height="auto"></canvas>  
     </div>
-  </div>
+</div>
+
+<div class="column">
+    <div class="row">
+        <canvas id="tvocChart" width="400" height="auto"></canvas> 
+    </div>
+    <div class="row">
+        <canvas id="CO2Chart" width="400" height="auto"></canvas>  
+    </div>
+</div>
+
+
+
+
+
+
 
 <script>
     window.setInterval('refresh()', 2000); 	// Call a function every 10000 milliseconds (OR 10 seconds).

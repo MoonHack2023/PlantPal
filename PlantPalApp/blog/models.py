@@ -11,15 +11,35 @@ from django.utils import timezone
 #     def _str_(self):
 #         return self.map_id
 
+# class Plant(models.Model):
+#     plant_id = models.IntegerField(primary_key=True)
+#     plant_name = models.CharField(max_length=50)
+
 class temp(models.Model):
+    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     temp = models.FloatField()
     class Meta:
         ordering = ('time',)
 
 class humidity(models.Model):
+    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     humidity = models.FloatField()
+    class Meta:
+        ordering = ('time',)
+
+class co2(models.Model):
+    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
+    time = models.DateTimeField(primary_key=True, auto_now=True)
+    co2 = models.FloatField()
+    class Meta:
+        ordering = ('time',)
+
+class tvoc(models.Model):
+    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
+    time = models.DateTimeField(primary_key=True, auto_now=True)
+    tvoc = models.FloatField()
     class Meta:
         ordering = ('time',)
 

@@ -1,7 +1,4 @@
-# python3.6
-
 import random
-
 from paho.mqtt import client as mqtt_client
 
 

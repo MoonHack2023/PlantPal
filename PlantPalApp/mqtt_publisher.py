@@ -1,10 +1,12 @@
 import random
 import time
+import ssl
 
 from paho.mqtt import client as mqtt_client
 
 
 broker = 'broker.emqx.io'
+# broker = 'test.mosquitto.org'
 port = 1883
 topic = "temperature&humidity"
 # generate client ID with pub prefix randomly

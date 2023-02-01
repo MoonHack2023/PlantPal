@@ -95,7 +95,7 @@ $(document).ready(function(){
         data: {
             labels: [{%for datatv in qstvoc%}'{{datatv.time}}',{%endfor%}], //loop through queryset, 
             datasets: [{
-                    label: 'Temperature',
+                    label: 'TVOC',
                     data: [{%for datatv in qstvoc%}{{datatv.tvoc}},{%endfor%}],
                     fill: false,
                     backgroundColor: 'rgba(50, 168, 84,1)',
@@ -116,7 +116,7 @@ $(document).ready(function(){
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'TVOC (°C)'
+                        labelString: 'TVOC (ppb)'
                     }
                 }],
                 // display name of label on the axis
@@ -158,7 +158,7 @@ $(document).ready(function(){
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'CO2 (%)'
+                        labelString: 'CO2 (ppm)'
                     }
                 }],
                 // display name of label on the axis
@@ -214,12 +214,6 @@ $(document).ready(function(){
     </div>
 </div>
 
-
-
-
-
-
-
 <script>
     window.setInterval('refresh()', 2000); 	// Call a function every 10000 milliseconds (OR 10 seconds).
 
@@ -229,3 +223,4 @@ $(document).ready(function(){
 </script>
 
 {%endblock content%}
+

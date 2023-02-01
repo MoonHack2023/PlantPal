@@ -52,3 +52,58 @@
             </div>
           </div>
         </div>
+
+
+        {% if length == 2 %}
+        <div class="card">
+          <div class="box">
+            <div class="content">
+                <h2>🪴</h2>
+                <h3>{{first}}</h3>
+              <!-- <p>{{value}}</p> -->
+              <a href="{% url 'blog-about1' %}">Check On Me!</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+            <div class="box">
+              <div class="content">
+                  <h2>🪴</h2>
+                  <h3>{{second}}</h3>
+                <!-- <p>{{value}}</p> -->
+                <a href="{% url 'blog-about2' %}">Check On Me!</a>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        {% if length == 1 %}
+        <div class="card">
+            <div class="box">
+              <div class="content">
+                  <h2>🪴</h2>
+                  <h3>{{first}}</h3>
+                <!-- <p>{{value}}</p> -->
+                <a href="{% url 'blog-about1' %}">Check On Me!</a>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+
+
+         {% for plant in plants %}
+        <div class="card">
+          <div class="box">
+            <div class="content">
+                <h2>🪴</h2>
+                <h3>{{plant}}</h3>
+              <!-- <p>{{value}}</p> -->
+              <form action=" {% url 'blog-about1' %} " method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="plant" value="{{plant}}">
+                <input type="submit" value="Check On Me!">
+              <a href="{% url 'blog-about1' %}">Check On Me!</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}

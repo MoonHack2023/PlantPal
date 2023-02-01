@@ -15,10 +15,15 @@ from django.utils import timezone
 #     plant_id = models.IntegerField(primary_key=True)
 #     plant_name = models.CharField(max_length=50)
 
+class Device(models.Model):
+    device_no = models.CharField(primary_key=True, max_length=10)
+    plant_name = models.CharField(max_length=50)
+
 class temp(models.Model):
     # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     temp = models.FloatField()
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
     class Meta:
         ordering = ('time',)
 
@@ -26,6 +31,7 @@ class humidity(models.Model):
     # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     humidity = models.FloatField()
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
     class Meta:
         ordering = ('time',)
 
@@ -33,6 +39,7 @@ class co2(models.Model):
     # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     co2 = models.FloatField()
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
     class Meta:
         ordering = ('time',)
 
@@ -40,6 +47,7 @@ class tvoc(models.Model):
     # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     tvoc = models.FloatField()
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
     class Meta:
         ordering = ('time',)
 

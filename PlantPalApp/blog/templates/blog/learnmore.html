@@ -178,103 +178,92 @@
     color: rgb(255, 55, 55);
     }
 
-    /* The popup form - hidden by default */
-.form-popup {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  right: 15px;
-  border: 3px solid #f1f1f1;
-  z-index: 9;
-}
+    .flip-card {
+        background-color: transparent;
+        border-radius: 15px;
+        margin: 30px;
+        position: relative;
+        min-width: 320px;
+        height: 150px;
+        perspective: 1000px;
+        text-align: center;
+        align-items: center;
+    }
 
-/* Add styles to the form container */
-.form-container {
-  max-width: 300px;
-  padding: 10px;
-  background-color: white;
-}
+    .flip-card-inner {
+        position: relative;
+        min-width: 320px;
+        height: 150px;
+        text-align: center;
+        border-radius: 15px;
+        transition: transform 1s;
+        transform-style: preserve-3d;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        align-items: center;
+        
+    }
 
-/* Full-width input fields */
-.form-container input[type=text], .form-container input[type=password] {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #f1f1f1;
-}
+    .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+    }
 
-/* When the inputs get focus, do something */
-.form-container input[type=text]:focus, .form-container input[type=password]:focus {
-  background-color: #ddd;
-  outline: none;
-}
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 15px;
+        text-align: center;
+    }
 
-/* Set a style for the submit/login button */
-.form-container .btn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-}
+    .flip-card-front {
+        position: absolute;
+        background: rgb(199,221,204);
+        background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%);
+        font-size: 1.8rem;
+        color: rgb(255, 255, 255);
+        z-index: 2;
+        border-radius: 15px;
+        justify-content: center;
+        align-items: center;
+    }
 
-/* Add a red background color to the cancel button */
-.form-container .cancel {
-  background-color: red;
-}
+    .flip-card-back {
+        position: absolute;
+        background: #c7ddcc;
+        color: white;
+        transform: rotateY(180deg);
+        border-radius: 15px;
+        justify-content: center;
+        align-items: center;
+    }
 
-/* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover {
-  opacity: 1;
-}
-
-.bo{
-  overflow: scroll;
-  width:auto;
-  height:80%;
-}
-
-input[type=submit]{
-    background:#4cbfa6; 
-    border:0 none;
-    cursor:pointer;
-    -webkit-border-radius: 5px;
-    border-radius: 5px; 
-    color: white;
-    font: sans-serif;
-    position: relative;
-    display: inline-block;
-    padding: 8px 20px;
-    text-decoration: none;
-    margin-top: 20px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    transition: 0.5s;
-    font-size: 1rem;
-}
-
-input[type=submit]:hover{
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
-    background: #fff;
-    color: rgb(255, 55, 55);
-}
-
-select {
-  width: 60%;
-  padding:5px;
-  border-radius:5px;
-}
-
-.hero-image .hero-text h1{
+    .hero-image .hero-text a{
         font-size: 3rem;
         color: #16123f;
         text-decoration: none;
         font-family: "Poppins", sans-serif;
         font-weight: 600;
         text-align: center;
+    }
+
+    .flip-card-front h3 {
+        font-size: 1.8rem;
+        color: rgb(255, 255, 255);
+        z-index: 2;
+        transition: 0.5s;
+        margin-top: 60px;
+    }
+
+    .flip-card-back p {
+        font-size: 1rem;
+        font-weight: 300;
+        color: rgb(255, 255, 255);
+        z-index: 1;
+        transition: 0.5s;
+        margin-top: 10px;
+        font-weight: 500;
     }
     
 </style>
@@ -286,65 +275,32 @@ select {
 <body>
     <div class="hero-image">
         <div class="hero-text">
-            <!-- <a href="{% url 'blog-plant' %}">Start your Planting Journey</a> -->
-            <h1>Start your Planting Journey</h1>
+            <a href="{% url 'blog-plant' %}">Start your Planting Journey</a>
+            <h3>Hover over the plant to learn more!</h3>
+            <!-- <h1>Start your Planting Journey</h1> -->
             <!-- <p>Set up your device now</p> -->
           </div>
     </div> 
     <div class="container">
-      <div class="card">
-        <div class="box">
-          <div class="content">
-              <!-- <h2>🪴</h2> -->
-              <h3>PlantPals Added</h3>
-              <div class="bo">
-                {% for p, d in dps %}
-                  <p>{{ p }} ({{d}})</p>
-                {% endfor %}
+        {% for p in pi %}
+            <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <h3>{{ p.plant_name }}</h3>
               </div>
-              <a href="{% url 'blog-learn' %}">Learn More About Us</a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="box">
-          <div class="content">
-            <h3>Check On Your Plants</h3>
-            <form action=" {% url 'blog-about1' %} " method="POST">
-              {% csrf_token %}
-              <select id="serial_no" name="serial_no">
-                {% for d in devices %}
-                  <option value="{{d}}">{{d}}</option>
-                {% endfor %}
-              </select>
-              <br>
-              <br>
-              <!-- <input type="hidden" name="plant" value="{{plant}}"> -->
-              <input type="submit" value="Check On Me!">
-              </form>
-            <!-- <p>Easy Setup for all your Sensors</p> -->
-            <!-- <a href="{% url 'blog-setup' %}">Get Started</a> -->
-          </div>
-        </div>
-      </div>
-     
-
-      <div class="card">
-          <div class="box">
-            <div class="content">
-              <h2>+</h2>
-              <h3>Add a New Device</h3>
-              <p>Easy Setup for all your Sensors</p>
-              <a href="{% url 'blog-setup' %}">Get Started</a>
+              <div class="flip-card-back">
+                <p>Optimum Temperature: {{ p.optemp }}°C</p>
+                <p>Optimum Humidity: {{ p.ophumid }}%</p>
+                <p>Optimum CO₂ Levels: {{ p.opco2 }} ppm</p>
+                <p>Optimum TVOC: {{ p.optvoc }} ppb</p>
+                <p>Optimum Light: {{ p.oplight }} nm</p>
+              </div>
             </div>
           </div>
-      </div>
-        
+
+        {% endfor %}
 
       </div>
-
-
 
 </body>
 

@@ -18,6 +18,15 @@ from django.utils import timezone
 class Device(models.Model):
     device_no = models.CharField(primary_key=True, max_length=10)
     plant_name = models.CharField(max_length=50)
+    score = models.FloatField(default=0)
+
+class Plants(models.Model):
+    plant_name = models.CharField(max_length=50, primary_key=True)
+    optemp = models.CharField(max_length=50)
+    ophumid = models.CharField(max_length=50)
+    opco2 = models.CharField(max_length=50)
+    optvoc = models.CharField(max_length=50)
+    oplight = models.CharField(max_length=50)
 
 class temp(models.Model):
     # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
@@ -47,6 +56,19 @@ class tvoc(models.Model):
     # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     tvoc = models.FloatField()
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
+    class Meta:
+        ordering = ('time',)
+
+class light(models.Model):
+    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
+    time = models.DateTimeField(primary_key=True, auto_now=True)
+    red = models.FloatField(default=0)
+    orange = models.FloatField(default=0)
+    yellow = models.FloatField(default=0)
+    green = models.FloatField(default=0)
+    blue = models.FloatField(default=0)
+    violet = models.FloatField(default=0)
     device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
     class Meta:
         ordering = ('time',)

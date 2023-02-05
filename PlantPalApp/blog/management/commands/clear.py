@@ -1,4 +1,4 @@
-from blog.models import temp, humidity, co2, tvoc
+from blog.models import temp, humidity, co2, tvoc, light, Device
 from django.core.management.base import BaseCommand
 import datetime
 import time
@@ -14,5 +14,7 @@ class Command(BaseCommand):
         humidity.objects.all().delete() 
         co2.objects.all().delete() 
         tvoc.objects.all().delete() 
+        light.objects.all().delete()
+        # Device.objects.all().delete()
             # print("after change:",humidity.objects.all().values())
 

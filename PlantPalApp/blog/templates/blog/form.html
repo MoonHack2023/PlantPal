@@ -293,24 +293,21 @@ input[type=text]{
                 <form action="/plant/" method="post">
                     <!-- <label for="plant_type">Plant Type</label> -->
                     {% csrf_token %}
-                    <select id="plant_type" name="plant_type">
+                    <input type="text" id="plant_type" name="plant_type" placeholder="Plant Type" required>
+                    <!-- <select id="plant_type" name="plant_type">
                         <option value="Rose">Rose</option>
                         <option value="Tomato">Tomato</option>
                         <option value="Lavender">Lavender</option>
                         <option value="Azalea">Azalea</option>
                         <option value="Sunflower">Sunflower</option>
-                    </select>
+                    </select> -->
                     <br>
                     <!-- write a text input for form -->
                     <!-- <label for="plant_name"></label> -->
                     <input type="text" id="serialno" name="serialno" placeholder="Device Serial Number" required>
                     <br>
                     <!-- <a href="{% url 'blog-plant' %}">Add</a> -->
-                    {% if alerts %}
-                        <input type="submit" value="Submit" onclick="alert('2 Sensors have already been configured, please remove them before adding a new plant.')">
-                    {% else %}
-                        <input type="submit" value="Submit">
-                    {% endif %}
+                    <input type="submit" value="Submit">
                   </form>
                   <a href="{% url 'blog-plant' %}">Back</a>
                 <!-- <a href="{% url 'blog-setup' %}">Add</a> -->

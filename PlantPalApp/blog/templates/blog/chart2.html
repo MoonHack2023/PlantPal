@@ -1,0 +1,180 @@
+{% extends 'blog/basic.html'%}
+
+{%block scripts%}
+
+
+<script>
+
+// jquery function
+$(document).ready(function(){
+    var light = document.getElementById('lightChart').getContext('2d');
+    var lightChart = new Chart(light, {
+        type: 'line',
+        data: {
+            labels: [{%for datal in qsl%}'{{datal.time}}',{%endfor%}], //loop through queryset, 
+            datasets: [{
+                    label: 'Red',
+                    data: [{%for datal in qsl%}{{datal.red}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(255, 2, 25, 1)',
+                    borderColor: 'rgba(255, 2, 25, 1)',
+                    tension: 0.3
+            },
+            {
+                    label: 'Orange',
+                    data: [{%for datal in qsl%}{{datal.orange}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(255, 125, 25, 1)',
+                    borderColor: 'rgba(255, 125, 25, 1)',
+                    tension: 0.3
+            },
+            {
+                    label: 'Yellow',
+                    data: [{%for datal in qsl%}{{datal.yellow}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(255, 238, 25, 1)',
+                    borderColor: 'rgba(255, 238, 25, 1)',
+                    tension: 0.3
+            },
+            {
+                    label: 'Green',
+                    data: [{%for datal in qsl%}{{datal.green}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(72, 238, 1, 1)',
+                    borderColor: 'rgba(72, 238, 1, 1)',
+                    tension: 0.3
+            },
+            {
+                    label: 'Blue',
+                    data: [{%for datal in qsl%}{{datal.blue}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(4, 106, 236, 1)',
+                    borderColor: 'rgba(4, 106, 236, 1)',
+                    tension: 0.3
+            },
+            {
+                    label: 'Violet',
+                    data: [{%for datal in qsl%}{{datal.violet}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(158, 64, 255, 1)',
+                    borderColor: 'rgba(158, 64, 255, 1)',
+                    tension: 0.3
+            }
+            ]},
+        // add text to the axis label of chart.js graph
+        options: {
+            title: {
+                display: true,
+                text: 'Spectral Light'
+            },
+            legend: {
+               display: false
+            },   
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Intensity (µW/cm²)'
+                    }
+                }],
+                // display name of label on the axis
+                xAxes: [{ 
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date and Time'
+                    }
+                }]
+            },
+            
+        }
+    });
+
+});
+
+
+</script>
+{%endblock scripts%}
+
+{%block content%}
+<!-- displaying the chart -->
+<!-- you can also play around with the width and height to increase or decrease the chart size -->
+<style>
+    body {
+        background: #ffffff;
+        /* background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%); */
+    }
+
+
+    .column {
+        float: left;
+        width: 50%;
+      }
+      
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .topnav{
+        background-color: rgb(255, 255, 255);
+        overflow: hidden;
+    }
+
+    a {
+        position: relative;
+        display: inline-block;
+        padding: 8px 20px;
+        background: #4cbfa6;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        /* margin-top: 20px; */
+        /* box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2); */
+        /* transition: 0.5s; */
+        font-family: "Poppins", sans-serif;
+    }
+
+    a:hover {
+    background: #4cbfa6ba;
+    font-family: "Poppins", sans-serif;
+    }
+
+
+</style>
+
+<div class="topnav">
+    <a href="{% url 'blog-about1' %}">Previous Page</a>
+</div>
+
+<canvas id="lightChart" width="auto" height="auto"></canvas> 
+<script>
+    window.setInterval('refresh()', 5000); 	// Call a function every 10000 milliseconds (OR 10 seconds).
+    // window.onunload = function(){ window.scrollTo(0,0); }
+    function refresh() {
+        window.location.reload();
+    }
+    window.onbeforeunload = function () {
+            var scrollPos;
+            if (typeof window.pageYOffset != 'undefined') {
+                scrollPos = window.pageYOffset;
+            }
+            else if (typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat') {
+                scrollPos = document.documentElement.scrollTop;
+            }
+            else if (typeof document.body != 'undefined') {
+                scrollPos = document.body.scrollTop;
+            }
+            document.cookie = "scrollTop=" + scrollPos;
+        }
+    window.onload = function () {
+        if (document.cookie.match(/scrollTop=([^;]+)(;|$)/) != null) {
+            var arr = document.cookie.match(/scrollTop=([^;]+)(;|$)/);
+            document.documentElement.scrollTop = parseInt(arr[1]);
+            document.body.scrollTop = parseInt(arr[1]);
+        }
+    }
+
+</script>
+
+{%endblock content%}

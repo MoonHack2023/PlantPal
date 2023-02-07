@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.shortcuts import HttpResponse
 from django.template import loader
 from django.views.generic import ListView, CreateView, UpdateView
-from .models import temp, humidity, co2, tvoc, Device, light, Plants
+from .models import temp, humidity, co2, tvoc, Device, light, Plants, avglight
 from django.db import connection
 from django.db.models import Q
 from django.db.models import Count
@@ -30,7 +30,7 @@ def plant_info(plant_name):
 
     model_engine = "text-davinci-003"
     
-    prompt = "Give me the optimum temperature, humidity, carbon dioxide, tvoc and wavlength of light conditions for growing a "
+    prompt = "Give me the optimum temperature, humidity, carbon dioxide, tvoc and average intensity of light in watts per square meter for growing a "
     # plant_name = input("Enter plant name: ")
     prompt = prompt + plant_name + " with units as a comma separated string"
     completion = openai.Completion.create(
@@ -57,21 +57,21 @@ def queryToValue(query, key):
 def findMaxMin(value):
     s = value.split("-")
     if len(s) > 1:
-        min = float(s[0])
-        max = float(s[1])
+        minValue = float(s[0])
+        maxValue = float(s[1])
     else:
-        min = float(value) - (float(value)*0.1)
-        max = float(value) + (float(value)*0.1)
-    return min,max
+        minValue = float(value) - (float(value)*0.05)
+        maxValue = float(value) + (float(value)*0.05)
+    return minValue,maxValue
 
 
-def checkOptimum(real, min, max):
+def checkOptimum(real, minValue, maxValue):
     count = 0
     for i in real:
-        if i >= min and i <= max:
+        if i >= minValue and i <= maxValue:
             count += 1
     if  len(real) == 0:
-        score = 0.0
+        score = -1
     else:
         score = count / len(real)
     return score
@@ -92,28 +92,30 @@ def about1(request):
     if 'serial_no' in request.POST:
         global no 
         no = request.POST['serial_no']
-    print(no)
-    length = len(temp.objects.all())
+    print("SERIAL", no)
+    length = len(temp.objects.filter(device_id=no).order_by('time'))
     if length > 9:
-        temps = temp.objects.filter(device_id=no).order_by('time')[length-10:]
-        hums = humidity.objects.filter(device_id=no).order_by('time')[length-10:]
-        co2s = co2.objects.filter(device_id=no).order_by('time')[length-10:]
-        tvocs = tvoc.objects.filter(device_id=no).order_by('time')[length-10:]
-        lights = light.objects.filter(device_id=no).order_by('time')[length-10:]
+        # print(temp.objects.filter(device_id=no).order_by('time').values('temp')[length-10:])
+        temps = temp.objects.filter(device_id=no).order_by('time')[length-500:]
+        hums = humidity.objects.filter(device_id=no).order_by('time')[length-500:]
+        co2s = co2.objects.filter(device_id=no).order_by('time')[length-500:]
+        tvocs = tvoc.objects.filter(device_id=no).order_by('time')[length-500:]
+        # lights = light.objects.filter(device_id=no).order_by('time')[length-10:]
     else: 
         temps = temp.objects.filter(device_id=no).order_by('time')
         hums = humidity.objects.filter(device_id=no).order_by('time')
         co2s = co2.objects.filter(device_id=no).order_by('time')
         tvocs = tvoc.objects.filter(device_id=no).order_by('time')
-        lights = light.objects.filter(device_id=no).order_by('time')
+        # lights = light.objects.filter(device_id=no).order_by('time')
 
+    # print(len(temps))
     context = {
         "qst": temps,
         "qsh": hums,
         "qsco2": co2s,
         "qstvoc": tvocs,
-        "qsl": lights,
-        "t": times
+        # "qsl": lights,
+        # "t": times
     } 
     # print(context)
 
@@ -127,20 +129,25 @@ def about2(request):
     # if 'serial_no' in request.POST:
     #      no = request.POST['serial_no']
     global no
-    length = len(light.objects.all())
+    length = len(temp.objects.filter(device_id=no).order_by('time'))
+
     if length > 9:
         lights = light.objects.filter(device_id=no).order_by('time')[length-10:]
+        avglights = avglight.objects.filter(device_id=no).order_by('time')[length-10:]
     else:
         lights = light.objects.filter(device_id=no).order_by('time')
+        avglights = avglight.objects.filter(device_id=no).order_by('time')
 
+    print(avglights)
 
     context = {
-        "qst": temp.objects.all(),
-        "qsh": humidity.objects.all(),
-        "qsco2": co2.objects.all(),
-        "qstvoc": tvoc.objects.all(),
+        # "qst": temp.objects.all(),
+        # "qsh": humidity.objects.all(),
+        # "qsco2": co2.objects.all(),
+        # "qstvoc": tvoc.objects.all(),
         "qsl": lights,
-        "t": times
+        "qsal": avglights,
+        # "t": times
     } 
 
     return render(request, 'blog/chart2.html', context)
@@ -218,53 +225,52 @@ def learn_more(request):
             plant_entry = Plants(plant_name=p, optemp=splitinfo[0], ophumid=splitinfo[1], opco2=splitinfo[2], optvoc=splitinfo[3], oplight=splitinfo[4])
             plant_entry.save()
     
-    extemp = queryToList(temp.objects.values_list("temp"))
-    exhum = queryToList(humidity.objects.values_list("humidity"))
-    exco2 = queryToList(co2.objects.values_list("co2"))
-    extvoc = queryToList(tvoc.objects.values_list("tvoc"))
+    # extemp = queryToList(temp.objects.values_list("temp"))
+    # exhum = queryToList(humidity.objects.values_list("humidity"))
+    # exco2 = queryToList(co2.objects.values_list("co2"))
+    # extvoc = queryToList(tvoc.objects.values_list("tvoc"))
     # exlight = queryToList(temp.objects.values_list(""))
     # print (checkOptimum(extemp, 10, 25))
     # print(extemp)
 
 
-    device = queryToList(Device.objects.values_list('device_no').order_by('device_no'))
+    # device = queryToList(Device.objects.values_list('device_no').order_by('device_no'))
 
-    for d in device:
-        # print(queryToList(Device.objects.filter(plant_name=c).values_list("device_no")))
-        extemp = queryToList(temp.objects.filter(device_id=d).values_list("temp"))
-        exhum = queryToList(humidity.objects.filter(device_id=d).values_list("humidity"))
-        exco2 = queryToList(co2.objects.filter(device_id=d).values_list("co2"))
-        extvoc = queryToList(tvoc.objects.filter(device_id=d).values_list("tvoc"))
-        plant_name = list(Device.objects.filter(device_no=d).values('plant_name'))
-        plant_name = queryToValue(plant_name, "plant_name")
-        ideal_conditions = Plants.objects.filter(plant_name=plant_name).values()
-        # print(ideal_conditions)
-        optemp = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('optemp')),"optemp")
-        ophum = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('ophumid')),"ophumid")
-        opco2 = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('opco2')),"opco2")
-        optvoc = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('optvoc')),"optvoc")
-        # ophum = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('ophumid')),"ophumid")
+    # for d in device:
+    #     # print(queryToList(Device.objects.filter(plant_name=c).values_list("device_no")))
+    #     extemp = queryToList(temp.objects.filter(device_id=d).values_list("temp"))
+    #     exhum = queryToList(humidity.objects.filter(device_id=d).values_list("humidity"))
+    #     exco2 = queryToList(co2.objects.filter(device_id=d).values_list("co2"))
+    #     extvoc = queryToList(tvoc.objects.filter(device_id=d).values_list("tvoc"))
+    #     plant_name = list(Device.objects.filter(device_no=d).values('plant_name'))
+    #     plant_name = queryToValue(plant_name, "plant_name")
+    #     ideal_conditions = Plants.objects.filter(plant_name=plant_name).values()
+    #     # print(ideal_conditions)
+    #     optemp = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('optemp')),"optemp")
+    #     ophum = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('ophumid')),"ophumid")
+    #     opco2 = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('opco2')),"opco2")
+    #     optvoc = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('optvoc')),"optvoc")
+    #     # ophum = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('ophumid')),"ophumid")
         
-        temp_range = findMaxMin(optemp)
-        hum_range = findMaxMin(ophum)
-        co2_range = findMaxMin(opco2)
-        tvoc_range = findMaxMin(optvoc)
+    #     temp_range = findMaxMin(optemp)
+    #     hum_range = findMaxMin(ophum)
+    #     co2_range = findMaxMin(opco2)
+    #     tvoc_range = findMaxMin(optvoc)
         
-        temp_score = checkOptimum(extemp, temp_range[0], temp_range[1])
-        hum_score = checkOptimum(exhum, hum_range[0], hum_range[1])
-        co2_score = checkOptimum(exco2, co2_range[0], co2_range[1])
-        tvoc_score = checkOptimum(extvoc, tvoc_range[0], tvoc_range[1])
-        print(temp_score)
+    #     temp_score = checkOptimum(extemp, temp_range[0], temp_range[1])
+    #     hum_score = checkOptimum(exhum, hum_range[0], hum_range[1])
+    #     co2_score = checkOptimum(exco2, co2_range[0], co2_range[1])
+    #     tvoc_score = checkOptimum(extvoc, tvoc_range[0], tvoc_range[1])
+    #     print(temp_score)
 
-        score = [temp_score, hum_score, co2_score, tvoc_score]
-        avg_score = sum(score)/len(score)
-        device_entry = Device(device_no=d, plant_name=plant_name,score=avg_score).save()
-        print(avg_score)
-        print(score)
+    #     score = [temp_score, hum_score, co2_score, tvoc_score]
+    #     avg_score = sum(score)/len(score)
+    #     device_entry = Device(device_no=d, plant_name=plant_name,score=avg_score).save()
+    #     print(avg_score)
+    #     print(score)
 
     context = {
         "pi": Plants.objects.all(),
-        "scores": score
     }
 
     return render(request, 'blog/learnmore.html', context)
@@ -280,10 +286,72 @@ def plant_setup(request):
     else:
         alert = False
     
-    
 
     context = {
         "alerts": alert
     }
 
     return render(request, 'blog/form.html', context)
+
+def score(request):
+    plant = Device.objects.values_list('plant_name').order_by('device_no')
+    plant = queryToList(plant)
+
+    device = queryToList(Device.objects.values_list('device_no').order_by('device_no'))
+    print(device)
+    # each_score = []
+    avg = [-100 for i in range(10)]
+    for d in device:
+        # print(queryToList(Device.objects.filter(plant_name=c).values_list("device_no")))
+        extemp = queryToList(temp.objects.filter(device_id=d).values_list("temp"))
+        exhum = queryToList(humidity.objects.filter(device_id=d).values_list("humidity"))
+        exco2 = queryToList(co2.objects.filter(device_id=d).values_list("co2"))
+        extvoc = queryToList(tvoc.objects.filter(device_id=d).values_list("tvoc"))
+        exlight = queryToList(avglight.objects.filter(device_id=d).values_list("intensity"))
+
+        plant_name = list(Device.objects.filter(device_no=d).values('plant_name'))
+        plant_name = queryToValue(plant_name, "plant_name")
+        ideal_conditions = Plants.objects.filter(plant_name=plant_name).values()
+        # print(ideal_conditions)
+        optemp = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('optemp')),"optemp")
+        ophum = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('ophumid')),"ophumid")
+        opco2 = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('opco2')),"opco2")
+        optvoc = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('optvoc')),"optvoc")
+        oplight = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('oplight')),"oplight")
+        # ophum = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('ophumid')),"ophumid")
+        
+        temp_range = findMaxMin(optemp)
+        hum_range = findMaxMin(ophum)
+        co2_range = findMaxMin(opco2)
+        tvoc_range = findMaxMin(optvoc)
+        avglight_range = findMaxMin(oplight)
+        
+        temp_score = checkOptimum(extemp, temp_range[0], temp_range[1])
+        hum_score = checkOptimum(exhum, hum_range[0], hum_range[1])
+        co2_score = checkOptimum(exco2, co2_range[0], co2_range[1])
+        tvoc_score = checkOptimum(extvoc, tvoc_range[0], tvoc_range[1])
+        avglight_score = checkOptimum(exlight, avglight_range[0], avglight_range[1])
+
+        # print(temp_score)
+
+        score = [temp_score, hum_score, co2_score, tvoc_score, avglight_score]
+        avg_score = (sum(score)/len(score))*100
+        # print(plant_name, score)
+
+        avg_score = round(avg_score,2)
+        device_entry = Device(device_no=d, plant_name=plant_name,score=avg_score).save()
+        avg[int(d[-1])-1] = avg_score
+        # string = string + d + "," + str(avg_score)+";"
+        # print(avg_score)
+        # print(score)
+
+
+    f = open("score.txt", "w")
+    f.write(str(avg)[1:-1])
+    f.close()
+
+    context ={
+        "devices": Device.objects.all().order_by('device_no')
+        # "scores": each_score
+    }
+    return render(request, 'blog/score.html', context)

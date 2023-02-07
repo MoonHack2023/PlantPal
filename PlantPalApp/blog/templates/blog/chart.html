@@ -271,6 +271,10 @@ $(document).ready(function(){
 <!-- displaying the chart -->
 <!-- you can also play around with the width and height to increase or decrease the chart size -->
 <style>
+    body {
+        background-color: #f7ffe2;
+    }
+
     .column {
         float: left;
         width: 50%;
@@ -282,7 +286,7 @@ $(document).ready(function(){
         clear: both;
     }
 
-    a {
+    .right a {
         position: relative;
         display: inline-block;
         padding: 8px 20px;
@@ -293,13 +297,13 @@ $(document).ready(function(){
         font-family: "Poppins", sans-serif;
     }
 
-    a:hover {
+    .right a:hover {
     background: #4cbfa6ba;
     font-family: "Poppins", sans-serif;
     }
 
     .topnav{
-        background-color: rgb(255, 255, 255);
+        background-color: #f7ffe2;
         overflow: hidden;
     }
 
@@ -311,9 +315,9 @@ $(document).ready(function(){
 </style>
 
 <div class="topnav">
-    <a href="{% url 'blog-plant' %}">Main</a>
+    <a href="{% url 'blog-plant' %}"> {% load static %} <img id="logo" src="{% static "blog/media/Lettering-PP-Logo-by-Acongraphic-135-580x386.png" %}" alt="logo" height="50" width="60" /></a>
     <div class="right">
-        <a href="{% url 'blog-about2' %}">Next Page</a>
+        <a href="{% url 'blog-about2' %}"> > </a>
     </div>
 </div>
 

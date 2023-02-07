@@ -43,7 +43,7 @@
     .hero-text {
         text-align: center;
         position: absolute;
-        top: 50%;
+        top: 70%;
         left: 50%;
         transform: translate(-50%, -50%);
         color: #16123f;
@@ -269,6 +269,14 @@ input[type=text]{
     border-width: 1px;
 }
 
+.hero-image .hero-text a{
+    font-size: 3rem;
+    color: #16123f;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    text-align: center;
+}    
 
     
 </style>
@@ -278,10 +286,11 @@ input[type=text]{
 </header>
 
 <body>
+  <a href="{% url 'blog-plant' %}"> {% load static %} <img id="logo" src="{% static "blog/media/Lettering-PP-Logo-by-Acongraphic-135-580x386.png" %}" alt="logo" height="50" width="60" /></a>
     <div class="hero-image">
         <div class="hero-text">
-            <h1>Start your Planting Journey</h1>
-            <!-- <p>Set up your device now</p> -->
+            <a href="{% url 'blog-plant' %}">Start your Planting Journey</a>
+            <h3>Easy setup and removal of devices</h3>
           </div>
     </div> 
 

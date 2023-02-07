@@ -43,7 +43,7 @@
     .hero-text {
         text-align: center;
         position: absolute;
-        top: 50%;
+        top: 60%;
         left: 50%;
         transform: translate(-50%, -50%);
         color: #16123f;
@@ -273,6 +273,8 @@
 </header>
 
 <body>
+  <a href="{% url 'blog-plant' %}"> {% load static %} <img id="logo" src="{% static "blog/media/Lettering-PP-Logo-by-Acongraphic-135-580x386.png" %}" alt="logo" height="50" width="60" /></a>
+
     <div class="hero-image">
         <div class="hero-text">
             <a href="{% url 'blog-plant' %}">Start your Planting Journey</a>
@@ -293,7 +295,7 @@
                 <p>Optimum Humidity: {{ p.ophumid }}%</p>
                 <p>Optimum CO₂ Levels: {{ p.opco2 }} ppm</p>
                 <p>Optimum TVOC: {{ p.optvoc }} ppb</p>
-                <p>Optimum Light: {{ p.oplight }} nm</p>
+                <p>Optimum Light: {{ p.oplight }} W/m²</p>
               </div>
             </div>
           </div>

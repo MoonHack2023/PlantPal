@@ -1,5 +1,5 @@
 # import sqlite3
-from blog.models import temp, humidity, co2, tvoc, light
+from blog.models import temp, humidity, co2, tvoc, light, avglight, Device
 from django.core.management.base import BaseCommand
 import datetime
 import time
@@ -20,19 +20,29 @@ class Command(BaseCommand):
             # print(f.readline())
             # if (len(f.readline())> 0):
             th = f.readline()
+            devices = ["HACK1", "HACK2","HACK3", "HACK4", "HACK5", "HACK6"]
             if len(th)> 0:
                 splitth = th.split(",")
-                tmp_var = temp(temp=splitth[0], device_id=splitth[-1])
-                hum_var = humidity(humidity=splitth[1], device_id=splitth[-1])
-                tv_var = tvoc(tvoc=splitth[2], device_id=splitth[-1])
-                co_var = co2(co2=splitth[3], device_id=splitth[-1])
-                light_var = light(red=splitth[4], orange=splitth[5], yellow=splitth[6], green=splitth[7], blue=splitth[8], violet=splitth[9], device_id=splitth[-1])
-                # print("Before change map_info:",humidity.objects.all().values())
-                tmp_var.save()
-                hum_var.save()
-                tv_var.save()
-                co_var.save()
-                light_var.save()
+                for d in devices:
+                    # tmp_var = temp(temp=splitth[0], device_id=splitth[-1])
+                    # hum_var = humidity(humidity=splitth[1], device_id=splitth[-1])
+                    # tv_var = tvoc(tvoc=splitth[2], device_id=splitth[-1])
+                    # co_var = co2(co2=splitth[3], device_id=splitth[-1])
+                    # light_var = light(red=splitth[4], orange=splitth[5], yellow=splitth[6], green=splitth[7], blue=splitth[8], violet=splitth[9], device_id=splitth[-1])
+                    # avglight_var = avglight(intensity=splitth[10], device_id=splitth[-1])
+                    tmp_var = temp(temp=splitth[0], device_id=d)
+                    hum_var = humidity(humidity=splitth[1], device_id=d)
+                    tv_var = tvoc(tvoc=splitth[2], device_id=d)
+                    co_var = co2(co2=splitth[3], device_id=d)
+                    light_var = light(red=splitth[4], orange=splitth[5], yellow=splitth[6], green=splitth[7], blue=splitth[8], violet=splitth[9], device_id=d)
+                    avglight_var = avglight(intensity=splitth[10], device_id=d)
+                    # print("Before change map_info:",humidity.objects.all().values())
+                    tmp_var.save()
+                    hum_var.save()
+                    tv_var.save()
+                    co_var.save()
+                    light_var.save()
+                    avglight_var.save()
                 time.sleep(5)
             # print("after change:",humidity.objects.all().values())
 

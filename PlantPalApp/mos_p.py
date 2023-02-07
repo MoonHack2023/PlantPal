@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 import random
+# from blog.models import Device
 
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 client = mqtt.Client(client_id)
@@ -8,12 +9,14 @@ client = mqtt.Client(client_id)
 broker = "test.mosquitto.org"
 # client.tls_set(ca_certs="mosquitto.org.crt", certfile="client.crt",keyfile="client.key")
 
-client.connect(broker,port=8886)
+client.connect(broker,port=1883)
 
 while True:
-    f = open("temphum.txt","r")
+    f = open("score.txt","r")
     string = f.readline()
-    MSG_INFO = client.publish("IC.embedded/MoonHack/test1", string)
+    # string = "hi"
+    # print(Device.objects.all())
+    MSG_INFO = client.publish("IC.embedded/MoonHack/webtopi", string)
     print(string)
     mqtt.error_string(MSG_INFO.rc)
     time.sleep(5)

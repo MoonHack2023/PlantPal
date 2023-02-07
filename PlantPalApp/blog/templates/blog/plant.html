@@ -28,7 +28,7 @@
         background: #f7ffe2;
         /* background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%); */
         /* Set a specific height */
-        height: 10%;
+        height: 5%;
 
         width: 100%;
 
@@ -112,7 +112,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: scroll;
+    /* overflow: scroll; */
     transition: 0.5s;
     }
 
@@ -133,7 +133,7 @@
     body .container .card .box .content {
     padding: 20px;
     text-align: center;
-    overflow: scroll;
+    /* overflow: scroll; */
     }
 
     body .container .card .box .content h2 {
@@ -233,7 +233,7 @@
 }
 
 .bo{
-  overflow: scroll;
+  /* overflow: scroll; */
   width:auto;
   height:80%;
 }
@@ -276,7 +276,8 @@ select {
         font-weight: 600;
         text-align: center;
     }
-    
+
+
 </style>
 
 <header>
@@ -284,6 +285,7 @@ select {
 </header>
 
 <body>
+  <a href="{% url 'blog-plant' %}"> {% load static %} <img id="logo" src="{% static "blog/media/Lettering-PP-Logo-by-Acongraphic-135-580x386.png" %}" alt="logo" height="50" width="60" /></a>
     <div class="hero-image">
         <div class="hero-text">
             <!-- <a href="{% url 'blog-plant' %}">Start your Planting Journey</a> -->
@@ -303,6 +305,7 @@ select {
                 {% endfor %}
               </div>
               <a href="{% url 'blog-learn' %}">Learn More About Us</a>
+              <a href="{% url 'blog-score' %}">Check Your Score</a>
           </div>
         </div>
       </div>

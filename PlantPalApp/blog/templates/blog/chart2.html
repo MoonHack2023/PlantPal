@@ -89,6 +89,49 @@ $(document).ready(function(){
         }
     });
 
+
+    var avglight = document.getElementById('avglightChart').getContext('2d');
+    var avglightChart = new Chart(avglight, {
+        type: 'line',
+        data: {
+            labels: [{%for dataal in qsal%}'{{dataal.time}}',{%endfor%}], //loop through queryset, 
+            datasets: [{
+                    label: 'Light Intensity',
+                    data: [{%for dataal in qsal%}{{dataal.intensity}},{%endfor%}],
+                    fill: false,
+                    backgroundColor: 'rgba(255, 2, 25, 1)',
+                    borderColor: 'rgba(255, 2, 25, 1)',
+                    tension: 0.3
+            }
+            ]},
+        // add text to the axis label of chart.js graph
+        options: {
+            title: {
+                display: true,
+                text: 'Average Light Intensity'
+            },
+            legend: {
+               display: false
+            },   
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Intensity (µW/cm²)'
+                    }
+                }],
+                // display name of label on the axis
+                xAxes: [{ 
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date and Time'
+                    }
+                }]
+            },
+            
+        }
+    });
+
 });
 
 
@@ -100,10 +143,8 @@ $(document).ready(function(){
 <!-- you can also play around with the width and height to increase or decrease the chart size -->
 <style>
     body {
-        background: #ffffff;
-        /* background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%); */
+        background-color: #f7ffe2;
     }
-
 
     .column {
         float: left;
@@ -117,7 +158,7 @@ $(document).ready(function(){
     }
 
     .topnav{
-        background-color: rgb(255, 255, 255);
+        background-color: #f7ffe2;
         overflow: hidden;
     }
 
@@ -136,18 +177,26 @@ $(document).ready(function(){
     }
 
     a:hover {
-    background: #4cbfa6ba;
-    font-family: "Poppins", sans-serif;
+        background: #4cbfa6ba;
+        font-family: "Poppins", sans-serif;
     }
 
 
 </style>
 
 <div class="topnav">
-    <a href="{% url 'blog-about1' %}">Previous Page</a>
+    <a href="{% url 'blog-about1' %}"> < </a>
 </div>
 
-<canvas id="lightChart" width="auto" height="auto"></canvas> 
+<div class="row">
+    <div class="column">
+        <canvas id="lightChart" width="auto" height="250"></canvas> 
+    </div>
+    <div class="column">
+        <canvas id="avglightChart" width="auto" height="250"></canvas> 
+    </div>
+
+
 <script>
     window.setInterval('refresh()', 5000); 	// Call a function every 10000 milliseconds (OR 10 seconds).
     // window.onunload = function(){ window.scrollTo(0,0); }

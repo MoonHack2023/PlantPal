@@ -73,6 +73,13 @@ class light(models.Model):
     class Meta:
         ordering = ('time',)
 
+class avglight(models.Model):
+    time = models.DateTimeField(primary_key=True, auto_now=True)
+    intensity = models.FloatField()
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
+    class Meta:
+        ordering = ('time',)
+
 
 # class all_info(models.Model):
 #     map_id = models.ForeignKey('map_info.map_id',on_delete=models.CASCADE,)

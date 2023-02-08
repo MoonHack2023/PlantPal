@@ -323,6 +323,12 @@ select {
               </select>
               <br>
               <br>
+              {% csrf_token %}
+              <select id="timeframe" name="timeframe">
+                {% for t in timeframe %}
+                  <option value="{{t}}">{{t}}</option>
+                {% endfor %}
+              </select>
               <!-- <input type="hidden" name="plant" value="{{plant}}"> -->
               <input type="submit" value="Check On Me!">
               </form>

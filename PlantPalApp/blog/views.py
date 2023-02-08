@@ -23,6 +23,8 @@ import openai
 import time
 
 no = "HACK1"
+timeframe = "2 mins"
+timeskip = 1
 
 def plant_info(plant_name):
     openai.api_key = "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"
@@ -92,22 +94,46 @@ def about1(request):
     if 'serial_no' in request.POST:
         global no 
         no = request.POST['serial_no']
+
+    if 'timeframe' in request.POST:
+        global timeframe 
+        global timeskip
+        timeframe = request.POST['timeframe']
+
+        if timeframe == "3 mins":
+            timeskip = 4
+        elif timeframe == "30 mins":
+            timeskip = 40
+        elif timeframe == "1 hr":
+            timeskip = 80
+        elif timeframe == "2 hrs":
+            timeskip = 160
+        elif timeframe == "12 hrs":
+            timeskip = 960
+        elif timeframe == "1 day":
+            timeskip = 1920
+
+
+
     print("SERIAL", no)
-    length = len(temp.objects.filter(device_id=no).order_by('time'))
+    print("timeskip", timeskip)
+    length = len(temp.objects.filter(device_id=no).order_by('time')[::timeskip])
     if length > 9:
         # print(temp.objects.filter(device_id=no).order_by('time').values('temp')[length-10:])
-        temps = temp.objects.filter(device_id=no).order_by('time')[length-500:]
-        hums = humidity.objects.filter(device_id=no).order_by('time')[length-500:]
-        co2s = co2.objects.filter(device_id=no).order_by('time')[length-500:]
-        tvocs = tvoc.objects.filter(device_id=no).order_by('time')[length-500:]
+        temps = temp.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
+        hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
+        co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
+        tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
         # lights = light.objects.filter(device_id=no).order_by('time')[length-10:]
     else: 
-        temps = temp.objects.filter(device_id=no).order_by('time')
-        hums = humidity.objects.filter(device_id=no).order_by('time')
-        co2s = co2.objects.filter(device_id=no).order_by('time')
-        tvocs = tvoc.objects.filter(device_id=no).order_by('time')
+        temps = temp.objects.filter(device_id=no).order_by('time')[::timeskip]
+        hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip]
+        co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip]
+        tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip]
         # lights = light.objects.filter(device_id=no).order_by('time')
 
+    print(timeskip)
+    print(temps)
     # print(len(temps))
     context = {
         "qst": temps,
@@ -129,14 +155,17 @@ def about2(request):
     # if 'serial_no' in request.POST:
     #      no = request.POST['serial_no']
     global no
-    length = len(temp.objects.filter(device_id=no).order_by('time'))
+    global timeskip
+    length = len(temp.objects.filter(device_id=no).order_by('time')[::timeskip])
 
+    global timeframe
+    
     if length > 9:
-        lights = light.objects.filter(device_id=no).order_by('time')[length-10:]
-        avglights = avglight.objects.filter(device_id=no).order_by('time')[length-10:]
+        lights = light.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
+        avglights = avglight.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
     else:
-        lights = light.objects.filter(device_id=no).order_by('time')
-        avglights = avglight.objects.filter(device_id=no).order_by('time')
+        lights = light.objects.filter(device_id=no).order_by('time')[::timeskip]
+        avglights = avglight.objects.filter(device_id=no).order_by('time')[::timeskip]
 
     print(avglights)
 
@@ -194,7 +223,8 @@ def plant_select(request):
     context = {
         "devices": device,
         "plants": plant,
-        "dps": dp
+        "dps": dp,
+        "timeframe": ["3 mins", "30 mins", "1 hr", "2 hrs", "12 hrs", "1 day"]
     }
     
     template = loader.get_template('blog/plant.html')

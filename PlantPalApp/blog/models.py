@@ -19,6 +19,13 @@ class Device(models.Model):
     device_no = models.CharField(primary_key=True, max_length=10)
     plant_name = models.CharField(max_length=50)
     score = models.FloatField(default=0)
+    login = models.CharField(max_length=50, default="ccl19")
+    temptip = models.CharField(max_length=50,default="ok")
+    humtip = models.CharField(max_length=50,default="ok")
+    co2tip = models.CharField(max_length=50,default="ok")
+    tvoctip = models.CharField(max_length=50,default="ok")
+    lighttip = models.CharField(max_length=50,default="ok")
+
 
 class Plants(models.Model):
     plant_name = models.CharField(max_length=50, primary_key=True)

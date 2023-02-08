@@ -25,6 +25,8 @@ import time
 no = "HACK1"
 timeframe = "2 mins"
 timeskip = 1
+user = ""
+authenticate = 0
 
 def plant_info(plant_name):
     openai.api_key = "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"
@@ -69,19 +71,30 @@ def findMaxMin(value):
 
 def checkOptimum(real, minValue, maxValue):
     count = 0
+    tip = "ok"
     for i in real:
         if i >= minValue and i <= maxValue:
             count += 1
+        elif i < minValue:
+            tip = "Increase"
+        elif i > maxValue:
+            tip = "Decrease"
     if  len(real) == 0:
         score = -1
     else:
         score = count / len(real)
-    return score
+    return score, tip
 
 # def base(request):
 #     return redirect('/home')
 
 def home(request):
+    global authenticate
+
+    if 'logout' in request.POST:
+        print ("logout")
+        # authenticate = 0
+
     context = { }
     return render(request, 'blog/base.html', context)
 
@@ -100,7 +113,9 @@ def about1(request):
         global timeskip
         timeframe = request.POST['timeframe']
 
-        if timeframe == "3 mins":
+        if timeframe == "1 mins":
+            timeskip = 1
+        elif timeframe == "3 mins":
             timeskip = 4
         elif timeframe == "30 mins":
             timeskip = 40
@@ -145,7 +160,11 @@ def about1(request):
     } 
     # print(context)
 
-    return render(request, 'blog/chart.html', context)
+    global authenticate
+    if authenticate == 1:
+        return render(request, 'blog/chart.html', context)
+    else:
+        return redirect('/')
 
 def about2(request):
     times =[]
@@ -178,22 +197,39 @@ def about2(request):
         "qsal": avglights,
         # "t": times
     } 
-
-    return render(request, 'blog/chart2.html', context)
-
-def login(request):
-    password = request.POST['psw']
-    username = request.POST['uname']
-    if username == 'ccl19' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
-        return redirect('/plant')
-    elif username == 'yscamy' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
-        return redirect('/plant')
-    elif username == 'hjj120' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
-        return redirect('/plant')
-    elif username == 'kelvin' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
-        return redirect('/plant')
+    
+    global authenticate
+    if authenticate == 1:
+        return render(request, 'blog/chart2.html', context)
     else:
         return redirect('/')
+
+def login(request):
+    global user, authenticate
+    
+    password = request.POST['psw']
+    username = request.POST['uname']
+    
+    user = username
+    print("user", user)
+    if username == 'ccl19' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
+        authenticate = 1
+        return redirect('/plant')
+    elif username == 'yscamy' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
+        authenticate = 1
+        return redirect('/plant')
+    elif username == 'hjj120' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
+        authenticate = 1
+        return redirect('/plant')
+    elif username == 'kelvin' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
+        authenticate = 1
+        return redirect('/plant')
+    elif 'logout' in request.POST:
+        authenticate = 0
+        return redirect('/')
+    else:
+        return redirect('/')
+    
 
 def form(request):
     return redirect('/about')
@@ -207,12 +243,13 @@ def plant_select(request):
         print("HERE")
         serialno = request.POST['serialno']
         plant_type = request.POST['plant_type']
-        device_var = Device(device_no=serialno, plant_name=plant_type)
+        global user
+        device_var = Device(device_no=serialno, plant_name=plant_type, login=user)
         print(plant_type)
         device_var.save()
 
-    plant = Device.objects.values_list('plant_name').order_by('device_no')
-    device = Device.objects.values_list('device_no').order_by('device_no')
+    plant = Device.objects.filter(login=user).values_list('plant_name').order_by('device_no')
+    device = Device.objects.filter(login=user).values_list('device_no').order_by('device_no')
 
     plant = queryToList(plant)
 
@@ -224,12 +261,18 @@ def plant_select(request):
         "devices": device,
         "plants": plant,
         "dps": dp,
-        "timeframe": ["3 mins", "30 mins", "1 hr", "2 hrs", "12 hrs", "1 day"]
+        "timeframe": ["1 min", "3 mins", "30 mins", "1 hr", "2 hrs", "12 hrs", "1 day"]
     }
     
     template = loader.get_template('blog/plant.html')
     # return render(request, 'blog/plant.html', context)
-    return HttpResponse(template.render(context, request))
+    
+    global authenticate
+    if authenticate == 1:
+        return HttpResponse(template.render(context, request))
+    else:
+        return redirect('/')
+
 
 def learn_more(request):
     plant = Device.objects.values_list('plant_name').order_by('device_no')
@@ -254,84 +297,45 @@ def learn_more(request):
             print(splitinfo)
             plant_entry = Plants(plant_name=p, optemp=splitinfo[0], ophumid=splitinfo[1], opco2=splitinfo[2], optvoc=splitinfo[3], oplight=splitinfo[4])
             plant_entry.save()
-    
-    # extemp = queryToList(temp.objects.values_list("temp"))
-    # exhum = queryToList(humidity.objects.values_list("humidity"))
-    # exco2 = queryToList(co2.objects.values_list("co2"))
-    # extvoc = queryToList(tvoc.objects.values_list("tvoc"))
-    # exlight = queryToList(temp.objects.values_list(""))
-    # print (checkOptimum(extemp, 10, 25))
-    # print(extemp)
-
-
-    # device = queryToList(Device.objects.values_list('device_no').order_by('device_no'))
-
-    # for d in device:
-    #     # print(queryToList(Device.objects.filter(plant_name=c).values_list("device_no")))
-    #     extemp = queryToList(temp.objects.filter(device_id=d).values_list("temp"))
-    #     exhum = queryToList(humidity.objects.filter(device_id=d).values_list("humidity"))
-    #     exco2 = queryToList(co2.objects.filter(device_id=d).values_list("co2"))
-    #     extvoc = queryToList(tvoc.objects.filter(device_id=d).values_list("tvoc"))
-    #     plant_name = list(Device.objects.filter(device_no=d).values('plant_name'))
-    #     plant_name = queryToValue(plant_name, "plant_name")
-    #     ideal_conditions = Plants.objects.filter(plant_name=plant_name).values()
-    #     # print(ideal_conditions)
-    #     optemp = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('optemp')),"optemp")
-    #     ophum = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('ophumid')),"ophumid")
-    #     opco2 = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('opco2')),"opco2")
-    #     optvoc = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('optvoc')),"optvoc")
-    #     # ophum = queryToValue(list(Plants.objects.filter(plant_name=plant_name).values('ophumid')),"ophumid")
-        
-    #     temp_range = findMaxMin(optemp)
-    #     hum_range = findMaxMin(ophum)
-    #     co2_range = findMaxMin(opco2)
-    #     tvoc_range = findMaxMin(optvoc)
-        
-    #     temp_score = checkOptimum(extemp, temp_range[0], temp_range[1])
-    #     hum_score = checkOptimum(exhum, hum_range[0], hum_range[1])
-    #     co2_score = checkOptimum(exco2, co2_range[0], co2_range[1])
-    #     tvoc_score = checkOptimum(extvoc, tvoc_range[0], tvoc_range[1])
-    #     print(temp_score)
-
-    #     score = [temp_score, hum_score, co2_score, tvoc_score]
-    #     avg_score = sum(score)/len(score)
-    #     device_entry = Device(device_no=d, plant_name=plant_name,score=avg_score).save()
-    #     print(avg_score)
-    #     print(score)
 
     context = {
         "pi": Plants.objects.all(),
     }
-
-    return render(request, 'blog/learnmore.html', context)
+    
+    global authenticate
+    if authenticate == 1:
+        return render(request, 'blog/learnmore.html', context)
+    else:
+        return redirect('/')
 
 
 def plant_setup(request):
-    f = open("/Users/charmainelouie/Documents/Imperial/Year 3/EmbeddedSystems/PlantPal/PlantPalApp/blog/text_files/plants.txt","r")
-    lines = f.readlines()
-    f.close()
-
-    if len(lines) == 2:
-        alert = True
+    global authenticate
+    if authenticate == 1:
+        return render(request, 'blog/form.html')
     else:
-        alert = False
-    
-
-    context = {
-        "alerts": alert
-    }
-
-    return render(request, 'blog/form.html', context)
+        return redirect('/')
 
 def score(request):
-    plant = Device.objects.values_list('plant_name').order_by('device_no')
+    global user
+    print("score user", user)
+    plant = Device.objects.filter(login=user).values_list('plant_name').order_by('device_no')
     plant = queryToList(plant)
 
-    device = queryToList(Device.objects.values_list('device_no').order_by('device_no'))
+    device = queryToList(Device.objects.filter(login=user).values_list('device_no').order_by('device_no'))
     print(device)
+
+    # num = []
+    num = [int(re.sub(r'[a-zA-Z]', '', d)) for d in device]
+    if len(num) > 0:
+        least = min(num)
+    else:
+        least = 0
     # each_score = []
-    avg = [-100 for i in range(10)]
+    avg = [-100 for i in range(len(device)+1)]
     for d in device:
+        # num = re.sub(r'[a-zA-Z]', '', d)
+        # print("num",num)
         # print(queryToList(Device.objects.filter(plant_name=c).values_list("device_no")))
         extemp = queryToList(temp.objects.filter(device_id=d).values_list("temp"))
         exhum = queryToList(humidity.objects.filter(device_id=d).values_list("humidity"))
@@ -364,13 +368,18 @@ def score(request):
 
         # print(temp_score)
 
-        score = [temp_score, hum_score, co2_score, tvoc_score, avglight_score]
+        score = [temp_score[0], hum_score[0], co2_score[0], tvoc_score[0], avglight_score[0]]
+    
         avg_score = (sum(score)/len(score))*100
         # print(plant_name, score)
 
+        tips = [temp_score[1], hum_score[1], co2_score[1], tvoc_score[1], avglight_score[1]]
+        print(tips)
+
         avg_score = round(avg_score,2)
-        device_entry = Device(device_no=d, plant_name=plant_name,score=avg_score).save()
-        avg[int(d[-1])-1] = avg_score
+        device_entry = Device(device_no=d, plant_name=plant_name,score=avg_score,login=user,temptip=temp_score[1],humtip=hum_score[1],co2tip=co2_score[1],tvoctip=tvoc_score[1],lighttip=avglight_score[1]).save()
+        devicenum = int(re.sub(r'[a-zA-Z]', '', d))
+        avg[devicenum-least] = avg_score
         # string = string + d + "," + str(avg_score)+";"
         # print(avg_score)
         # print(score)
@@ -381,7 +390,21 @@ def score(request):
     f.close()
 
     context ={
-        "devices": Device.objects.all().order_by('device_no')
+        "devices": Device.objects.filter(login=user).all().order_by('device_no')
         # "scores": each_score
     }
-    return render(request, 'blog/score.html', context)
+
+    global authenticate
+    if authenticate == 1:
+        return render(request, 'blog/score.html', context)
+    else:
+        return redirect('/')
+
+
+
+def tips(request):
+
+    context = {
+        "devices": Device.objects.filter(login=user).all().order_by('device_no')
+    }
+    return render(request, 'blog/tips.html', context)

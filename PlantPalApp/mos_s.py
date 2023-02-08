@@ -6,7 +6,7 @@ import ssl
 
 # broker = "mqtt.eclipseprojects.io" 
 broker = "test.mosquitto.org"
-port = 1883
+port = 8884
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 
 
@@ -23,7 +23,7 @@ def connect_mqtt() -> mqtt_client:
             print("Failed to connect, return code %d\n", rc)
 
     client = mqtt_client.Client(client_id)
-    # client.tls_set(ca_certs="mosquitto.org.crt", certfile="client.crt",keyfile="client.key")
+    client.tls_set(ca_certs="mosquitto.org.crt", certfile="sub.crt",keyfile="sub.key")
     client.on_connect = on_connect
     client.connect(broker, port)
     return client

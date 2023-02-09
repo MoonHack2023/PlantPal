@@ -1,0 +1,6 @@
+# .gitignore
+
+# pycache
+PlantPalApp/__pycache__/
+PlantPalApp/django_project/__pycache__
+PlantPalApp/blog/__pycache__

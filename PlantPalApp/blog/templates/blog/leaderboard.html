@@ -2,9 +2,6 @@
 <html>
     <title> Leaderboard </title>
     <style>
-        html,body {
-            height: 100%;
-        }
 
         body {
             margin: 0;
@@ -14,13 +11,15 @@
             font-weight: 500;
             text-align: center;
             background-attachment: fixed;
+            overflow: scroll;
         }
 
         .container {
             position: absolute;
-            top: 50%;
+            top: 80%;
             left: 50%;
             transform: translate(-50%, -50%);
+            padding-bottom: 50px;
         }
 
         table {
@@ -69,6 +68,13 @@
         h1 {
             font-size: 2.5rem;
         }
+
+        .topnav {
+            /* background-color: #333; */
+            position: relative;
+            /* height: 90px; */
+        }
+
     </style>
     <body>
         <div class="topnav">

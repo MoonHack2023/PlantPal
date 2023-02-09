@@ -1,14 +1,10 @@
 import paho.mqtt.client as mqtt
 from paho.mqtt import client as mqtt_client
-import time
 import random
-import ssl
 
-# broker = "mqtt.eclipseprojects.io" 
 broker = "test.mosquitto.org"
 port = 8884
 client_id = f'python-mqtt-{random.randint(0, 100)}'
-
 
 topic = "IC.embedded/MoonHack/test1"
 

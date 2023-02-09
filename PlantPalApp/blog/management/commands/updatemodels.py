@@ -1,5 +1,5 @@
 # import sqlite3
-from blog.models import temp, humidity, co2, tvoc, light, avglight, Device
+from blog.models import temp, humidity, co2, tvoc, light, avglight, Leaderboard
 from django.core.management.base import BaseCommand
 import datetime
 import time
@@ -15,6 +15,19 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         #pass in every single element in sequence from this.
         # temp.objects.all().delete() 
+
+        # Leaderboard(user="yscamy",score=51.37).save()
+        # Leaderboard(user="hjj120",score=64.54).save()
+        # Leaderboard(user="kelvin",score=32.15).save()
+        # Leaderboard(user="lightning",score=51.82).save()
+        # Leaderboard(user="neocandy",score=34.6).save()
+        # Leaderboard(user="star-lord",score=52.4).save()
+        # Leaderboard(user="milkyway",score=72.92).save()
+        # Leaderboard(user="strawberry",score=55.2).save()
+        # Leaderboard(user="venusnix",score=51.19).save()
+        # Leaderboard(user="papillon",score=29.04).save()
+
+
         while True:
             f = open("blog/text_files/thsensor.txt", "r")
             # print(f.readline())

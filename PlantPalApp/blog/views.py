@@ -384,7 +384,7 @@ def tips(request):
 
 def leaderboard(request):
     context = {
-        "leaderboards": Leaderboard.objects.all()
+        "leaderboards": Leaderboard.objects.order_by('-score').all()
     }
 
     global authenticate

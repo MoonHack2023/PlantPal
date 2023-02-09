@@ -12,6 +12,7 @@ urlpatterns = [
     path('plant/learnmore', views.learn_more, name='blog-learn'),
     path('plant/score', views.score, name='blog-score'),
     path('plant/score/tips', views.tips, name='blog-tips'),
+    path('plant/score/leaderboard', views.leaderboard, name='blog-leaderboard'),
     # path('index/', TemplateView.as_view(template_name='index.html'),
     # name='index'),
     # path('form/',views.form, name='blog-about'),

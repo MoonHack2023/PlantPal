@@ -1,310 +1,270 @@
 <!DOCTYPE html>
 <html>
+    <title>Learn More</title>
 
-<style>
-    body, html {
-        height: 100%;
-        width: 100%;
-    }
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+        }
 
-    /* .container {
-        width: 30%;
-        height: auto;
-        background-color: #f1f1f1;
-        text-align: center;
-        border-width: 3px;
-        border-style: solid;
-        border-color: #000000;
-        float: left;
-    } */
-    .row:after {
-        display: table;
-        clear: both;
-    }
+        .row:after {
+            display: table;
+            clear: both;
+        }
 
-    .hero-image {
-    /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
-        /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/static/blog/media/bg.png") ; */
-        background: #f7ffe2;
-        /* background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%); */
-        /* Set a specific height */
-        height: 10%;
+        .hero-image {
+            background: #f7ffe2;
+            height: 10%;
+            width: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
 
-        width: 100%;
+        .hero-text {
+            text-align: center;
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #16123f;
+        }
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
 
-        /* Position and center the image to scale nicely on all screens */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: relative;
-    }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            min-height: 100vh;
+            background: #f7ffe2;
+        }
 
-/* Place text in the middle of the image */
-    .hero-text {
-        text-align: center;
-        position: absolute;
-        top: 60%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #16123f;
-    }
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap");
-    * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-    }
+        body .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 40px 0;
+        }
 
-    body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    min-height: 100vh;
-    background: #f7ffe2;
-    /* background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%); */
-    }
+        body .container .card {
+            position: relative;
+            min-width: 320px;
+            height: 440px;
+            border-radius: 15px;
+            margin: 30px;
+            transition: 0.5s;
+        }
 
-    body .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 40px 0;
-    }
+        body .container .card:last-child .box .content a {
+            background: #16123f;
+        }
 
-    body .container .card {
-    position: relative;
-    min-width: 320px;
-    height: 440px;
-    /* box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2),
-        inset -5px -5px 15px rgba(255, 255, 255, 0.1),
-        5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.1); */
-    border-radius: 15px;
-    margin: 30px;
-    transition: 0.5s;
-    }
+        body .container .card .box {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            background: rgb(199,221,204);
+            background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: scroll;
+            transition: 0.5s;
+        }
 
-    /* body .container .card:nth-child(1) .box .content a {
-    background: #ffe26a;
-    }
+        body .container .card .box:hover {
+            transform: translateY(-50px);
+        }
 
-    body .container .card:nth-child(2) .box .content a {
-    background: #ffe26a;
-    } */
+        body .container .card .box:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 188, 188, 0.03);
+        }
 
-    body .container .card:last-child .box .content a {
-    background: #16123f;
-    }
+        body .container .card .box .content {
+            padding: 20px;
+            text-align: center;
+            overflow: scroll;
+        }
 
-    body .container .card .box {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    /* background: #7d94b5; */
-    background: rgb(199,221,204);
-    background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%);
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: scroll;
-    transition: 0.5s;
-    }
+        body .container .card .box .content h2 {
+            position: absolute;
+            top: -10px;
+            right: 30px;
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.353);
+        }
 
-    body .container .card .box:hover {
-    transform: translateY(-50px);
-    }
+        body .container .card .box .content h3 {
+            font-size: 1.8rem;
+            color: rgb(255, 255, 255);
+            z-index: 2;
+            transition: 0.5s;
+            margin-bottom: 15px;
+        }
 
-    body .container .card .box:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-    background: rgba(255, 188, 188, 0.03);
-    }
+        body .container .card .box .content p {
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            z-index: 1;
+            transition: 0.5s;
+        }
 
-    body .container .card .box .content {
-    padding: 20px;
-    text-align: center;
-    overflow: scroll;
-    }
+        body .container .card .box .content a {
+            position: relative;
+            display: inline-block;
+            padding: 8px 20px;
+            background: #4cbfa6;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            margin-top: 20px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+            transition: 0.5s;
+        }
+        body .container .card .box .content a:hover {
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
+            background: #fff;
+            color: rgb(255, 55, 55);
+        }
 
-    body .container .card .box .content h2 {
-    position: absolute;
-    top: -10px;
-    right: 30px;
-    font-size: 8rem;
-    color: rgba(255, 255, 255, 0.353);
-    }
+        .flip-card {
+            background-color: transparent;
+            border-radius: 15px;
+            margin: 30px;
+            position: relative;
+            min-width: 320px;
+            height: 150px;
+            perspective: 1000px;
+            text-align: center;
+            align-items: center;
+        }
 
-    body .container .card .box .content h3 {
-    font-size: 1.8rem;
-    color: rgb(255, 255, 255);
-    z-index: 2;
-    transition: 0.5s;
-    margin-bottom: 15px;
-    }
+        .flip-card-inner {
+            position: relative;
+            min-width: 320px;
+            height: 150px;
+            text-align: center;
+            border-radius: 15px;
+            transition: transform 1s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            align-items: center;
+        }
 
-    body .container .card .box .content p {
-    font-size: 1rem;
-    font-weight: 300;
-    color: rgba(255, 255, 255, 0.9);
-    z-index: 1;
-    transition: 0.5s;
-    }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
 
-    body .container .card .box .content a {
-        position: relative;
-        display: inline-block;
-        padding: 8px 20px;
-        background: #4cbfa6;
-        border-radius: 5px;
-        text-decoration: none;
-        color: white;
-        margin-top: 20px;
-        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-        transition: 0.5s;
-    }
-    body .container .card .box .content a:hover {
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
-    background: #fff;
-    color: rgb(255, 55, 55);
-    }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            text-align: center;
+        }
 
-    .flip-card {
-        background-color: transparent;
-        border-radius: 15px;
-        margin: 30px;
-        position: relative;
-        min-width: 320px;
-        height: 150px;
-        perspective: 1000px;
-        text-align: center;
-        align-items: center;
-    }
+        .flip-card-front {
+            position: absolute;
+            background: rgb(199,221,204);
+            background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%);
+            font-size: 1.8rem;
+            color: rgb(255, 255, 255);
+            z-index: 2;
+            border-radius: 15px;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .flip-card-inner {
-        position: relative;
-        min-width: 320px;
-        height: 150px;
-        text-align: center;
-        border-radius: 15px;
-        transition: transform 1s;
-        transform-style: preserve-3d;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        align-items: center;
+        .flip-card-back {
+            position: absolute;
+            background: #c7ddcc;
+            color: white;
+            transform: rotateY(180deg);
+            border-radius: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image .hero-text a{
+            font-size: 3rem;
+            color: #16123f;
+            text-decoration: none;
+            font-family: "Poppins", sans-serif;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .flip-card-front h3 {
+            font-size: 1.8rem;
+            color: rgb(255, 255, 255);
+            z-index: 2;
+            transition: 0.5s;
+            margin-top: 60px;
+        }
+
+        .flip-card-back p {
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgb(255, 255, 255);
+            z-index: 1;
+            transition: 0.5s;
+            margin-top: 10px;
+            font-weight: 500;
+        }
         
-    }
+    </style>
 
-    .flip-card:hover .flip-card-inner {
-        transform: rotateY(180deg);
-    }
+    <body>
+    <a href="{% url 'blog-plant' %}"> {% load static %} <img id="logo" src="{% static "blog/media/Lettering-PP-Logo-by-Acongraphic-135-580x386.png" %}" alt="logo" height="50" width="60" /></a>
 
-    .flip-card-front, .flip-card-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        border-radius: 15px;
-        text-align: center;
-    }
-
-    .flip-card-front {
-        position: absolute;
-        background: rgb(199,221,204);
-        background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%);
-        font-size: 1.8rem;
-        color: rgb(255, 255, 255);
-        z-index: 2;
-        border-radius: 15px;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .flip-card-back {
-        position: absolute;
-        background: #c7ddcc;
-        color: white;
-        transform: rotateY(180deg);
-        border-radius: 15px;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .hero-image .hero-text a{
-        font-size: 3rem;
-        color: #16123f;
-        text-decoration: none;
-        font-family: "Poppins", sans-serif;
-        font-weight: 600;
-        text-align: center;
-    }
-
-    .flip-card-front h3 {
-        font-size: 1.8rem;
-        color: rgb(255, 255, 255);
-        z-index: 2;
-        transition: 0.5s;
-        margin-top: 60px;
-    }
-
-    .flip-card-back p {
-        font-size: 1rem;
-        font-weight: 300;
-        color: rgb(255, 255, 255);
-        z-index: 1;
-        transition: 0.5s;
-        margin-top: 10px;
-        font-weight: 500;
-    }
-    
-</style>
-
-<header>
-    
-</header>
-
-<body>
-  <a href="{% url 'blog-plant' %}"> {% load static %} <img id="logo" src="{% static "blog/media/Lettering-PP-Logo-by-Acongraphic-135-580x386.png" %}" alt="logo" height="50" width="60" /></a>
-
-    <div class="hero-image">
-        <div class="hero-text">
-            <a href="{% url 'blog-plant' %}">Start your Planting Journey</a>
-            <h3>Hover over the plant to learn more!</h3>
-            <!-- <h1>Start your Planting Journey</h1> -->
-            <!-- <p>Set up your device now</p> -->
-          </div>
-    </div> 
-    <div class="container">
-        {% for p in pi %}
-            <div class="flip-card">
-            <div class="flip-card-inner">
-              <div class="flip-card-front">
-                <h3>{{ p.plant_name }}</h3>
-              </div>
-              <div class="flip-card-back">
-                <p>Optimum Temperature: {{ p.optemp }}°C</p>
-                <p>Optimum Humidity: {{ p.ophumid }}%</p>
-                <p>Optimum CO₂ Levels: {{ p.opco2 }} ppm</p>
-                <p>Optimum TVOC: {{ p.optvoc }} ppb</p>
-                <p>Optimum Light: {{ p.oplight }} W/m²</p>
-              </div>
+        <div class="hero-image">
+            <div class="hero-text">
+                <a href="{% url 'blog-plant' %}">Start your Planting Journey</a>
+                <h3>Hover over the plant to learn more!</h3>
             </div>
-          </div>
+        </div> 
+        <div class="container">
+            {% for p in pi %}
+                <div class="flip-card">
+                <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <h3>{{ p.plant_name }}</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Optimum Temperature: {{ p.optemp }}°C</p>
+                    <p>Optimum Humidity: {{ p.ophumid }}%</p>
+                    <p>Optimum CO₂ Levels: {{ p.opco2 }} ppm</p>
+                    <p>Optimum TVOC: {{ p.optvoc }} ppb</p>
+                    <p>Optimum Light: {{ p.oplight }} W/m²</p>
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
-        {% endfor %}
-
-      </div>
-
-</body>
-
+    </body>
 
 </html>

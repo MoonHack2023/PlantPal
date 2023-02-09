@@ -1,302 +1,221 @@
 <!DOCTYPE html>
 <html>
+    <title>Tips</title>
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+        }
 
-<style>
-    body, html {
-        height: 100%;
-        width: 100%;
-    }
+        .row:after {
+            display: table;
+            clear: both;
+        }
 
-    .row:after {
-        display: table;
-        clear: both;
-    }
+        .hero-image {
+            background: #f7ffe2;
+            height: 10%;
+            width: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
 
-    .hero-image {
-    /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
-        /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/static/blog/media/bg.png") ; */
-        background: #f7ffe2;
-        /* background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%); */
-        /* Set a specific height */
-        height: 10%;
-        width: 100%;
-        /* Position and center the image to scale nicely on all screens */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: relative;
-    }
+        .hero-text {
+            text-align: center;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -30%);
+            color: #16123f;
+        }
 
-/* Place text in the middle of the image */
-    .hero-text {
-        text-align: center;
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -30%);
-        color: #16123f;
-    }
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap");
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
 
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&display=swap");
-    * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-    }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            min-height: 100vh;
+            background: #f7ffe2;
+        }
 
-    body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    min-height: 100vh;
-    background: #f7ffe2;
-    /* background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%); */
-    }
+        body .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 40px 0;
+        }
 
-    body .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 40px 0;
-    }
+        body .container .card {
+            position: relative;
+            min-width: 320px;
+            height: 440px;
+            border-radius: 15px;
+            margin: 30px;
+            transition: 0.5s;
+        }
 
-    body .container .card {
-    position: relative;
-    min-width: 320px;
-    height: 440px;
-    /* box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2),
-        inset -5px -5px 15px rgba(255, 255, 255, 0.1),
-        5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.1); */
-    border-radius: 15px;
-    margin: 30px;
-    transition: 0.5s;
-    }
+        body .container .card .box {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            background: rgb(199,221,204);
+            background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.5s;
+        }
 
-    /* body .container .card:nth-child(1) .box .content a {
-    background: #ffe26a;
-    }
+        body .container .card .box:hover {
+            transform: translateY(-50px);
+        }
 
-    body .container .card:nth-child(2) .box .content a {
-    background: #ffe26a;
-    } */
+        body .container .card .box:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 188, 188, 0.03);
+        }
 
+        body .container .card .box .content {
+            padding: 20px;
+            text-align: center;
+        }
 
-    body .container .card .box {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    /* background: #7d94b5; */
-    background: rgb(199,221,204);
-    background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%);
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* overflow: scroll; */
-    transition: 0.5s;
-    }
+        body .container .card .box .content h2 {
+            position: absolute;
+            top: -10px;
+            right: 30px;
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.353);
+        }
 
-    body .container .card .box:hover {
-    transform: translateY(-50px);
-    }
+        body .container .card .box .content h3 {
+            font-size: 1.8rem;
+            color: rgb(255, 255, 255);
+            z-index: 2;
+            transition: 0.5s;
+            margin-bottom: 15px;
+        }
 
-    body .container .card .box:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-    background: rgba(255, 188, 188, 0.03);
-    }
+        body .container .card .box .content p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            z-index: 1;
+            transition: 0.5s;
+        }
 
-    body .container .card .box .content {
-    padding: 20px;
-    text-align: center;
-    /* overflow: scroll; */
-    }
+        body .container .card .box .content i {
+            font-size: 1rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            z-index: 1;
+            transition: 0.5s;
+        }
 
-    body .container .card .box .content h2 {
-    position: absolute;
-    top: -10px;
-    right: 30px;
-    font-size: 8rem;
-    color: rgba(255, 255, 255, 0.353);
-    }
+        body .container .card .box .content a {
+            position: relative;
+            display: inline-block;
+            padding: 8px 20px;
+            background: #4cbfa6;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            margin-top: 20px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+            transition: 0.5s;
+        }
 
-    body .container .card .box .content h3 {
-    font-size: 1.8rem;
-    color: rgb(255, 255, 255);
-    z-index: 2;
-    transition: 0.5s;
-    margin-bottom: 15px;
-    }
+        body .container .card .box .content a:hover {
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
+            background: #fff;
+            color: rgb(255, 55, 55);
+        }
 
-    body .container .card .box .content p {
-    font-size: 1rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    z-index: 1;
-    transition: 0.5s;
-    }
-    body .container .card .box .content i {
-    font-size: 1rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    z-index: 1;
-    transition: 0.5s;
-    }
+        input[type=submit]{
+            background:#4cbfa6; 
+            border:0 none;
+            cursor:pointer;
+            -webkit-border-radius: 5px;
+            border-radius: 5px; 
+            color: white;
+            font: sans-serif;
+            position: relative;
+            display: inline-block;
+            padding: 8px 20px;
+            text-decoration: none;
+            margin-top: 20px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+            transition: 0.5s;
+            font-size: 1rem;
+        }
 
-    body .container .card .box .content a {
-        position: relative;
-        display: inline-block;
-        padding: 8px 20px;
-        background: #4cbfa6;
-        border-radius: 5px;
-        text-decoration: none;
-        color: white;
-        margin-top: 20px;
-        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-        transition: 0.5s;
-    }
-    body .container .card .box .content a:hover {
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
-    background: #fff;
-    color: rgb(255, 55, 55);
-    }
+        input[type=submit]:hover{
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
+            background: #fff;
+            color: rgb(255, 55, 55);
+        }
 
-    /* The popup form - hidden by default */
-.form-popup {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  right: 15px;
-  border: 3px solid #f1f1f1;
-  z-index: 9;
-}
+        select {
+            width: 60%;
+            padding:5px;
+            border-radius:5px;
+        }
 
-/* Add styles to the form container */
-.form-container {
-  max-width: 300px;
-  padding: 10px;
-  background-color: white;
-}
+        .hero-image .hero-text a{
+            font-size: 3rem;
+            color: #16123f;
+            text-decoration: none;
+            font-family: "Poppins", sans-serif;
+            font-weight: 600;
+            text-align: center;
+        }    
 
-/* Full-width input fields */
-.form-container input[type=text], .form-container input[type=password] {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #f1f1f1;
-}
+        .hero-image .hero-text p{
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #16123f;
+        }
+        
+    </style>
 
-/* When the inputs get focus, do something */
-.form-container input[type=text]:focus, .form-container input[type=password]:focus {
-  background-color: #ddd;
-  outline: none;
-}
+    <header>
+        
+    </header>
 
-/* Set a style for the submit/login button */
-.form-container .btn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-}
-
-/* Add a red background color to the cancel button */
-.form-container .cancel {
-  background-color: red;
-}
-
-/* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover {
-  opacity: 1;
-}
-
-.bo{
-  /* overflow: scroll; */
-  width:auto;
-  height:80%;
-}
-
-input[type=submit]{
-    background:#4cbfa6; 
-    border:0 none;
-    cursor:pointer;
-    -webkit-border-radius: 5px;
-    border-radius: 5px; 
-    color: white;
-    font: sans-serif;
-    position: relative;
-    display: inline-block;
-    padding: 8px 20px;
-    text-decoration: none;
-    margin-top: 20px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    transition: 0.5s;
-    font-size: 1rem;
-}
-
-input[type=submit]:hover{
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.6);
-    background: #fff;
-    color: rgb(255, 55, 55);
-}
-
-select {
-  width: 60%;
-  padding:5px;
-  border-radius:5px;
-}
-
-.hero-image .hero-text a{
-    font-size: 3rem;
-    color: #16123f;
-    text-decoration: none;
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
-    text-align: center;
-}    
-
-.hero-image .hero-text p{
-        font-size: 1rem;
-        font-weight: 600;
-        color: #16123f;
-    }
-    
-</style>
-
-<header>
-    
-</header>
-
-<body>
-    <a href="{% url 'blog-plant' %}"> {% load static %} <img id="logo" src="{% static "blog/media/Lettering-PP-Logo-by-Acongraphic-135-580x386.png" %}" alt="logo" height="50" width="60" /></a>
-    <div class="hero-image">
-        <div class="hero-text">
-            <!-- <a href="{% url 'blog-plant' %}">Start your Planting Journey</a> -->
-            <a href="{% url 'blog-plant' %}">Start your Planting Journey</a>
-            <p>Look at tips to ensure optimal grouwth for your plants</p>
-            <!-- <p>Set up your device now</p> -->
-          </div>
-    </div> 
-    <div class="container">
-      {% for d in devices %}
-        <div class="card">
-        <div class="box">
-          <div class="content">
+    <body>
+        <a href="{% url 'blog-plant' %}"> {% load static %} <img id="logo" src="{% static "blog/media/Lettering-PP-Logo-by-Acongraphic-135-580x386.png" %}" alt="logo" height="50" width="60" /></a>
+        <div class="hero-image">
+            <div class="hero-text">
+                <a href="{% url 'blog-plant' %}">Start your Planting Journey</a>
+                <p>Look at tips to ensure optimal growth for your plants</p>
+            </div>
+        </div> 
+        <div class="container">
+        {% for d in devices %}
+            <div class="card">
+            <div class="box">
+            <div class="content">
                 <h3> {{d.device_no}}: {{d.plant_name}} </h3>
                 {% if d.temptip != "ok" %}
                     <p> {{d.temptip}} the temperature</p>
@@ -305,7 +224,7 @@ select {
                     <p> {{d.humtip}} the humidity</p>
                 {% endif %}
                 {% if d.co2tip != "ok" %}
-                    <p> {{d.humtip}} the CO2 levels</p>
+                    <p> {{d.humtip}} the CO₂ levels</p>
                 {% endif %}
                 {% if d.tvoctip != "ok" %}
                     <p> {{d.tvoctip}} the TVOC levels</p>
@@ -313,13 +232,11 @@ select {
                 {% if d.lighttip != "ok" %}
                     <p> {{d.lighttip}} the light intensity</p>
                 {% endif %}
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-      
-
-</body>
-
+            </div>
+            </div>
+            </div>
+        {% endfor %}
+        
+    </body>
 
 </html>

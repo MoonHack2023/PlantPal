@@ -87,13 +87,7 @@ class avglight(models.Model):
     class Meta:
         ordering = ('time',)
 
-
-# class all_info(models.Model):
-#     map_id = models.ForeignKey('map_info.map_id',on_delete=models.CASCADE,)
-#     map_size = models.ForeignKey('map_info.map_size',on_delete=models.CASCADE,)
-#     path = models.CharField(max_length=600)#designed to store the whole long path. 
-#     tile_number = models.IntegerField()
-#     tile_info = models.CharField(max_length=50)
-
-
-    
+class Leaderboard(models.Model):
+    score = models.FloatField()
+    user = models.CharField(primary_key=True, max_length=50)
+    # plant = models.CharField(max_length=50)

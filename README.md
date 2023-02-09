@@ -4,7 +4,7 @@ Smart Environment Sensor for Plant Monitoring
 
 ## Running the web app
 
-First clear the database with `bash clear.sh` or `python3 manage.py clear`
+First clear the database with `./clear.sh` or `python3 manage.py clear`
 
 Then use the following commands.
 ```
@@ -14,12 +14,9 @@ python3 mqtt_client.py
 python3 manage.py updatemodels
 ```
 
-Change the data of the graph by changing `temphum.txt`
-
-
 ## Running the web app with sensors
 
-First clear the database with `bash clear.sh` or `python3 manage.py clear`
+First clear the database with `./clear.sh` or `python3 manage.py clear`
 
 Inside PlantPalApp run following
 
@@ -40,4 +37,3 @@ Inside PlantPalApp run following
 python3 tcp_client.py
 python3 manage.py updatemodels
 ```
-

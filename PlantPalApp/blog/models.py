@@ -1,31 +1,21 @@
 from django.db import models
 from django.utils import timezone
 
-
-# Create your models here.
-# class map_info(models.Model):
-#     map_name = models.CharField(max_length=100)
-#     map_id = models.IntegerField(primary_key=True)
-#     map_size = models.CharField(max_length=50)
-#     date_time = models.DateTimeField(default=timezone.now)
-#     def _str_(self):
-#         return self.map_id
-
-# class Plant(models.Model):
-#     plant_id = models.IntegerField(primary_key=True)
-#     plant_name = models.CharField(max_length=50)
+class User(models.Model):
+    username = models.CharField(primary_key=True,max_length=50)
+    password = models.CharField(max_length=100)
 
 class Device(models.Model):
     device_no = models.CharField(primary_key=True, max_length=10)
     plant_name = models.CharField(max_length=50)
     score = models.FloatField(default=0)
-    login = models.CharField(max_length=50, default="ccl19")
+    # login = models.CharField(max_length=50, default="ccl19")
+    login = models.ForeignKey(User, on_delete=models.CASCADE, default="ccl19")
     temptip = models.CharField(max_length=50,default="ok")
     humtip = models.CharField(max_length=50,default="ok")
     co2tip = models.CharField(max_length=50,default="ok")
     tvoctip = models.CharField(max_length=50,default="ok")
     lighttip = models.CharField(max_length=50,default="ok")
-
 
 class Plants(models.Model):
     plant_name = models.CharField(max_length=50, primary_key=True)
@@ -36,7 +26,6 @@ class Plants(models.Model):
     oplight = models.CharField(max_length=50)
 
 class temp(models.Model):
-    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     temp = models.FloatField()
     device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
@@ -44,7 +33,6 @@ class temp(models.Model):
         ordering = ('time',)
 
 class humidity(models.Model):
-    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     humidity = models.FloatField()
     device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
@@ -52,7 +40,6 @@ class humidity(models.Model):
         ordering = ('time',)
 
 class co2(models.Model):
-    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     co2 = models.FloatField()
     device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
@@ -60,7 +47,6 @@ class co2(models.Model):
         ordering = ('time',)
 
 class tvoc(models.Model):
-    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     tvoc = models.FloatField()
     device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
@@ -68,7 +54,6 @@ class tvoc(models.Model):
         ordering = ('time',)
 
 class light(models.Model):
-    # plant_id = models.ForeignKey(Plant, on_delete=models.CASCADE, default=1)
     time = models.DateTimeField(primary_key=True, auto_now=True)
     red = models.FloatField(default=0)
     orange = models.FloatField(default=0)
@@ -87,7 +72,13 @@ class avglight(models.Model):
     class Meta:
         ordering = ('time',)
 
+class airVelocity(models.Model):
+    time = models.DateTimeField(primary_key=True, auto_now=True)
+    velocity = models.FloatField()
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, default="")
+    class Meta:
+        ordering = ('time',)
+
 class Leaderboard(models.Model):
     score = models.FloatField()
     user = models.CharField(primary_key=True, max_length=50)
-    # plant = models.CharField(max_length=50)

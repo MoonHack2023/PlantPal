@@ -1,15 +1,14 @@
 from audioop import minmax
 from datetime import datetime
-# from tkinter import Y
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import HttpResponse
 from django.template import loader
 from django.views.generic import ListView, CreateView, UpdateView
-from .models import temp, humidity, co2, tvoc, Device, light, Plants, avglight, Leaderboard
-from django.db import connection
-from django.db.models import Q
-from django.db.models import Count
+from .models import temp, humidity, co2, tvoc, Device, light, Plants, avglight, Leaderboard, User, airVelocity
+# from django.db import connection
+# from django.db.models import Q
+# from django.db.models import Count
 import os
 from django.utils import timezone
 import hashlib
@@ -80,7 +79,6 @@ def checkOptimum(real, minValue, maxValue):
         score = count / len(real)
     return score, tip
 
-
 def home(request):
     global authenticate
 
@@ -88,7 +86,7 @@ def home(request):
         print ("logout")
         authenticate = 0
 
-    return render(request, 'blog/base.html')
+    return render(request, 'blog/signup.html')
 
 def about1(request):
     times =[]
@@ -128,20 +126,21 @@ def about1(request):
         hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
         co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
         tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
+        velos = airVelocity.filter(device_id=no).order_by('time')[::timeskip][length-10:]
     else: 
         temps = temp.objects.filter(device_id=no).order_by('time')[::timeskip]
         hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip]
         co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip]
         tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip]
+        velos = airVelocity.filter(device_id=no).order_by('time')[::timeskip]
 
-    # print(timeskip)
-    # print(temps)
 
     context = {
         "qst": temps,
         "qsh": hums,
         "qsco2": co2s,
         "qstvoc": tvocs,
+        "qsv": velos,
     } 
 
     global authenticate
@@ -184,28 +183,48 @@ def about2(request):
 def login(request):
     global user, authenticate
     
-    password = request.POST['psw']
-    username = request.POST['uname']
+    if 'uname' in request.POST:
+        password = request.POST['psw']
+        password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        username = request.POST['uname']
+        user = username
+        print(password)
+        # if user not in User.objects.values_list('username'):
+        #     return redirect('/')
+            
+        if queryToValue(User.objects.filter(username=username).values('password'),'password') == password:
+            authenticate = 1
+            return redirect('/plant')
+        else:
+            return redirect('/')
+
     
-    user = username
+    if 'newuname' in request.POST:
+        newusername = request.POST['newuname']
+        newpassword = request.POST['newpsw']
+        newpassword = hashlib.sha256(newpassword.encode('utf-8')).hexdigest()
+        User(username=newusername, password=newpassword).save()
+        return redirect('/')
+    
+    # user = username
     print("user", user)
-    if username == 'ccl19' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
-        authenticate = 1
-        return redirect('/plant')
-    elif username == 'yscamy' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
-        authenticate = 1
-        return redirect('/plant')
-    elif username == 'hjj120' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
-        authenticate = 1
-        return redirect('/plant')
-    elif username == 'kelvin' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
-        authenticate = 1
-        return redirect('/plant')
-    elif 'logout' in request.POST:
-        authenticate = 0
-        return redirect('/')
-    else:
-        return redirect('/')
+    # if username == 'ccl19' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
+    #     authenticate = 1
+    #     return redirect('/plant')
+    # elif username == 'yscamy' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
+    #     authenticate = 1
+    #     return redirect('/plant')
+    # elif username == 'hjj120' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
+    #     authenticate = 1
+    #     return redirect('/plant')
+    # elif username == 'kelvin' and hashlib.sha256(password.encode('utf-8')).hexdigest() == '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4':
+    #     authenticate = 1
+    #     return redirect('/plant')
+    # elif 'logout' in request.POST:
+    #     authenticate = 0
+    #     return redirect('/')
+    # else:
+    #     return redirect('/')
 
 def form(request):
     return redirect('/about')
@@ -220,12 +239,12 @@ def plant_select(request):
         serialno = request.POST['serialno']
         plant_type = request.POST['plant_type']
         global user
-        device_var = Device(device_no=serialno, plant_name=plant_type, login=user)
+        device_var = Device(device_no=serialno, plant_name=plant_type, login_id=user)
         print(plant_type)
         device_var.save()
 
-    plant = Device.objects.filter(login=user).values_list('plant_name').order_by('device_no')
-    device = Device.objects.filter(login=user).values_list('device_no').order_by('device_no')
+    plant = Device.objects.filter(login_id=user).values_list('plant_name').order_by('device_no')
+    device = Device.objects.filter(login_id=user).values_list('device_no').order_by('device_no')
 
     plant = queryToList(plant)
 
@@ -251,7 +270,7 @@ def plant_select(request):
 
 
 def learn_more(request):
-    plant = Device.objects.filter(login=user).values_list('plant_name').order_by('device_no')
+    plant = Device.objects.filter(login_id=user).values_list('plant_name').order_by('device_no')
     plant = queryToList(plant)
     # print(plant)
 
@@ -297,19 +316,22 @@ def plant_setup(request):
 def score(request):
     global user
     print("score user", user)
-    plant = Device.objects.filter(login=user).values_list('plant_name').order_by('device_no')
+    plant = Device.objects.filter(login_id=user).values_list('plant_name').order_by('device_no')
     plant = queryToList(plant)
 
-    device = queryToList(Device.objects.filter(login=user).values_list('device_no').order_by('device_no'))
+    print(Device.objects.filter(login=user).values_list('device_no'))
+    device = queryToList(Device.objects.filter(login_id=user).values_list('device_no').order_by('device_no'))
     print(device)
 
     num = [int(re.sub(r'[a-zA-Z]', '', d)) for d in device]
     if len(num) > 0:
         least = min(num)
+        most = max(num)
     else:
         least = 0
+        most = 0
 
-    avg = [-100 for i in range(len(device)+1)]
+    avg = [-100 for i in range(most+1)]
 
     for d in device:
         extemp = queryToList(temp.objects.filter(device_id=d).values_list("temp"))
@@ -345,10 +367,9 @@ def score(request):
         avg_score = (sum(score)/len(score))*100
 
         tips = [temp_score[1], hum_score[1], co2_score[1], tvoc_score[1], avglight_score[1]]
-        # print(tips)
 
         avg_score = round(avg_score,2)
-        device_entry = Device(device_no=d, plant_name=plant_name,score=avg_score,login=user,temptip=temp_score[1],humtip=hum_score[1],co2tip=co2_score[1],tvoctip=tvoc_score[1],lighttip=avglight_score[1]).save()
+        device_entry = Device(device_no=d, plant_name=plant_name,score=avg_score,login_id=user,temptip=temp_score[1],humtip=hum_score[1],co2tip=co2_score[1],tvoctip=tvoc_score[1],lighttip=avglight_score[1]).save()
         devicenum = int(re.sub(r'[a-zA-Z]', '', d))
         avg[devicenum-least] = avg_score
 
@@ -361,8 +382,9 @@ def score(request):
     f.write(str(avg)[1:-1])
     f.close()
 
+    print(Device.objects.filter(login_id=user).all().order_by('device_no'))
     context ={
-        "devices": Device.objects.filter(login=user).all().order_by('device_no')
+        "devices": Device.objects.filter(login_id=user).all().order_by('device_no')
     }
 
     global authenticate
@@ -373,7 +395,7 @@ def score(request):
 
 def tips(request):
     context = {
-        "devices": Device.objects.filter(login=user).all().order_by('device_no')
+        "devices": Device.objects.filter(login_id=user).all().order_by('device_no')
     }
 
     global authenticate

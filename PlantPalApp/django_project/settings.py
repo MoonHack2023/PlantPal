@@ -26,7 +26,7 @@ SECRET_KEY = 'exhlfdat&vfum(-34*c2uroi(($ww(yo$9pv98=e6p^gl(-eoj'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://4160-2a0c-5bc0-40-2e33-1418-efdf-213d-103d.eu.ngrok.io']
+CSRF_TRUSTED_ORIGINS = ['https://e877-2a01-4b00-80ec-bd00-480d-55d0-4014-9c73.eu.ngrok.io']
 
 # Application definition
 

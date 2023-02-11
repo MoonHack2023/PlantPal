@@ -167,6 +167,46 @@ $(document).ready(function(){
         }
     });
 
+    var velo = document.getElementById('veloChart').getContext('2d');
+    var veloChart = new Chart(velo, {
+        type: 'line',
+        data: {
+            labels: [{%for datav in qsv%}'{{datav.time}}',{%endfor%}], //loop through queryset, 
+            datasets: [{
+                label: 'Air Velocity',
+                data: [{%for datav in qsv%}{{datav.velocity}},{%endfor%}],
+                fill: false,
+                backgroundColor: 'rgba(211, 161, 255,1)',
+                borderColor: 'rgba(211, 161, 255,1)',
+                tension: 0.3
+            }
+        ]},
+        options: {
+            title: {
+                display: true,
+                text: 'Air Velocity'
+            },
+            legend: {
+               display: false
+            },   
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Air Velocity (m/s)'
+                    }
+                }],
+                xAxes: [{ 
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date and Time'
+                    }
+                }]
+            },
+            
+        }
+    });
+
 });
 
 

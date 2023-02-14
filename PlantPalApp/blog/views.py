@@ -126,13 +126,13 @@ def about1(request):
         hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
         co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
         tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
-        velos = airVelocity.filter(device_id=no).order_by('time')[::timeskip][length-10:]
+        velos = airVelocity.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
     else: 
         temps = temp.objects.filter(device_id=no).order_by('time')[::timeskip]
         hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip]
         co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip]
         tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip]
-        velos = airVelocity.filter(device_id=no).order_by('time')[::timeskip]
+        velos = airVelocity.objects.filter(device_id=no).order_by('time')[::timeskip]
 
 
     context = {
@@ -375,14 +375,16 @@ def score(request):
 
     max_score = max(avg)
     # Leaderboard.objects.all().delete()
+    plant_name = queryToValue(Device.objects.filter(login_id=user).values_list().filter(score=max_score).values('plant_name'), 'plant_name')
+    
     if int(max_score) > 0:
-        Leaderboard(user=user,score=max_score).save()
+        Leaderboard(user=user,score=max_score,plant_name=plant_name).save()
 
     f = open("score.txt", "w")
     f.write(str(avg)[1:-1])
     f.close()
 
-    print(Device.objects.filter(login_id=user).all().order_by('device_no'))
+    # print(Device.objects.filter(login_id=user).all().order_by('device_no'))
     context ={
         "devices": Device.objects.filter(login_id=user).all().order_by('device_no')
     }
@@ -414,3 +416,6 @@ def leaderboard(request):
         return render(request, 'blog/leaderboard.html', context)
     else:
         return redirect('/')
+
+def controls(request):
+    return render(request, 'blog/controls.html')

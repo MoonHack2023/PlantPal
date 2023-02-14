@@ -82,3 +82,4 @@ class airVelocity(models.Model):
 class Leaderboard(models.Model):
     score = models.FloatField()
     user = models.CharField(primary_key=True, max_length=50)
+    plant_name = models.CharField(max_length=50)

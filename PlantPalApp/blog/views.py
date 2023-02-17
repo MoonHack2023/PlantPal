@@ -107,9 +107,9 @@ def about1(request):
         elif timeframe == "3 mins":
             timeskip = 4
         elif timeframe == "30 mins":
-            timeskip = 40
+            timeskip = 30
         elif timeframe == "1 hr":
-            timeskip = 80
+            timeskip = 70
         elif timeframe == "2 hrs":
             timeskip = 160
         elif timeframe == "12 hrs":
@@ -119,22 +119,31 @@ def about1(request):
 
     print("SERIAL", no)
     print("timeskip", timeskip)
-    length = len(temp.objects.filter(device_id=no).order_by('time')[::timeskip])
+    lengtht = len(temp.objects.filter(device_id=no).order_by('time')[::timeskip])
+    lengthh = len(humidity.objects.filter(device_id=no).order_by('time')[::timeskip])
+    lengthc = len(co2.objects.filter(device_id=no).order_by('time')[::timeskip])
+    lengthtv = len(tvoc.objects.filter(device_id=no).order_by('time')[::timeskip])
+    lengthv = len(airVelocity.objects.filter(device_id=no).order_by('time')[::timeskip])
     
-    if length > 9:
-        temps = temp.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
-        hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
-        co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
-        tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
-        velos = airVelocity.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:]
+    print(len(temp.objects.filter(device_id=no).order_by('time'))/timeskip)
+    print(lengtht)
+
+    if lengthv > 9:
+        temps = temp.objects.filter(device_id=no).order_by('time')[::timeskip][lengtht-10:]
+        hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip][lengthh-10:]
+        co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip][lengthc-10:]
+        tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip][lengthtv-10:]
+        velos = airVelocity.objects.filter(device_id=no).order_by('time')[::timeskip][lengthv-10:]
     else: 
         temps = temp.objects.filter(device_id=no).order_by('time')[::timeskip]
         hums = humidity.objects.filter(device_id=no).order_by('time')[::timeskip]
         co2s = co2.objects.filter(device_id=no).order_by('time')[::timeskip]
         tvocs = tvoc.objects.filter(device_id=no).order_by('time')[::timeskip]
         velos = airVelocity.objects.filter(device_id=no).order_by('time')[::timeskip]
+    # velos = airVelocity.objects.filter(device_id=no).order_by('time')[::timeskip]
 
-
+    # print(airVelocity.objects.filter(device_id=no).order_by('time')[::timeskip][length-10:])
+    print(temps)
     context = {
         "qst": temps,
         "qsh": hums,
@@ -142,12 +151,14 @@ def about1(request):
         "qstvoc": tvocs,
         "qsv": velos,
     } 
+    return render(request, 'blog/chart.html', context)
 
-    global authenticate
-    if authenticate == 1:
-        return render(request, 'blog/chart.html', context)
-    else:
-        return redirect('/')
+
+    # global authenticate
+    # if authenticate == 1:
+    #     return render(request, 'blog/chart.html', context)
+    # else:
+    #     return redirect('/')
 
 def about2(request):
     times =[]
@@ -380,8 +391,13 @@ def score(request):
     if int(max_score) > 0:
         Leaderboard(user=user,score=max_score,plant_name=plant_name).save()
 
+    f = open("score.txt","r")
+    scoreStr = f.readline()
+    splitStr = scoreStr.split("|")
+    f.close()
+
     f = open("score.txt", "w")
-    f.write(str(avg)[1:-1])
+    f.write(str(avg)[1:-1]+"|"+splitStr[1])
     f.close()
 
     # print(Device.objects.filter(login_id=user).all().order_by('device_no'))
@@ -418,4 +434,20 @@ def leaderboard(request):
         return redirect('/')
 
 def controls(request):
+    f = open("score.txt","r")
+    scoreStr = f.readline()
+    splitStr = scoreStr.split("|")
+    f.close()
+    if 'onV' in request.POST:
+        # print("switch")
+        f = open("score.txt","w")
+        f.write(splitStr[0]+"|"+"On")
+        f.close()
+    else:
+        f = open("score.txt","w")
+        f.write(splitStr[0]+"|"+"Of")
+        f.close()
+
+
+
     return render(request, 'blog/controls.html')

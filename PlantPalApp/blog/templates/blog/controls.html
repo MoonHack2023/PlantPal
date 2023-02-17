@@ -140,7 +140,7 @@
         }
 
         input[type=submit]{
-            background:#4cbfa6; 
+            background:#1a2c49; 
             border:0 none;
             cursor:pointer;
             -webkit-border-radius: 5px;
@@ -155,6 +155,7 @@
             box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
             transition: 0.5s;
             font-size: 1rem;
+            margin-left: 100px;
         }
 
         input[type=submit]:hover{
@@ -205,10 +206,10 @@
         
         .rows{
             display: flex;
-            /* justify-content: center; */
+            justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-            min-height: 20%;
+            min-height: 80%;
             background: rgb(199,221,204);
             background: linear-gradient(130deg, rgba(199,221,204,1) 0%, rgba(171,214,153,1) 46%, rgba(117,201,183,1) 80%);
             width: 60%;
@@ -217,6 +218,7 @@
             color: rgb(255, 255, 255);
             font-family: "Poppins", "sans-serif";
             font-size: 20px;
+            /* padding: 10px; */
         }
 
         .rows h1 {
@@ -228,7 +230,8 @@
 
         .rows .right{
             position: absolute;
-            right: 300px;
+            padding: 10px;
+            /* right: 300px; */
         }
 
         .rows .right p{
@@ -281,7 +284,7 @@
         }
 
         input:focus + .slider {
-            box-shadow: 0 0 1px #005fb2;
+            box-shadow: 0 0 1px #b23800;
         }
 
         input:checked + .slider:before {
@@ -299,6 +302,26 @@
             border-radius: 50%;
         }
 
+        hr.solid {
+            border-top: 1px solid rgba(205, 205, 205, 0.569);
+
+        }
+
+        .column {
+            /* float: left; */
+            justify-content: center;
+            align-items: center;
+            width:50%;
+        }
+        
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+            padding: 30px;
+            justify-content: center;
+            align-items: center;
+        }
 
     </style>
 
@@ -318,40 +341,116 @@
             </div>
         </div> 
 
+        <div class="rows">
+            <div class="column">
+                <div class="row">
+                    <h1>Temperature</h1>
+                </div>
+                <div class="row">
+                    <h1>Light</h1>
+                </div>
+                <div class="row">
+                    <h1>Humidity</h1>
+                </div>
+                <div class="row">
+                    <h1>Fan</h1>
+                </div>
+            </div>
+            
+            <div class="column">
+                <div class="row">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="range" class="save-cb-state" name="water" min="0" max="100" value="30" class="slide" id="myRange">
+                        <p><span id="demo"></span> °C </p>
+                    </form>
+                </div>
+                <div class="row">
+                    <form name="v" action="" method="post">
+                        <label class="switch">
+                            {% csrf_token %}
+                            <input type="checkbox" class="save-cb-state" id="OnL" name="onL">
+                            <span class="slider round"></span>
+                        </label>
+                    </form> 
+                </div>
+                <div class="row">
+                    <form name="v" action="" method="post">
+                        <label class="switch">
+                            {% csrf_token %}
+                            <input type="checkbox" class="save-cb-state" id="OnH" name="onH">
+                            <span class="slider round"></span>
+                        </label>
+                    </form> 
+                </div>
+                <div class="row">
+                    <form name="v" action="" method="post">
+                        <label class="switch">
+                            {% csrf_token %}
+                            <input type="checkbox" class="save-cb-state" id="onV" name="onV" onClick="myFunction()">
+                            <span class="slider round"></span>
+                        </label>
+                        <input class="submit" type="submit" value="Submit">
+                    </form> 
+                </div>
+            </div>
+        </div>
 
-        <div class="rows">
-            <h1>Temperature</h1>
-            <div class="right">
-                <form action="" method="post">
-                    <input type="range" name="water" min="0" max="100" value="0" class="slide" id="myRange">
-                    <p><span id="demo"></span> °C </p>
-                </form>
-            </div>
-        </div>
-        <div class="rows">
-            <h1>Light</h1>
-            <div class="right">
-                <form action="" method="post">
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </form> 
-            </div>
-        </div>
-        <div class="rows">
-            <h1>Humidity</h1>
-            <div class="right">
-                <form action="" method="post">
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </form> 
-            </div>
-        </div>
-        
         <script>
+            (function() {
+                // variable to store our current state
+                var cbstate;
+                
+                // bind to the onload event
+                window.addEventListener('load', function() {
+                    // Get the current state from localstorage
+                    // State is stored as a JSON string
+                    cbstate = JSON.parse(localStorage['CBState'] || '{}');
+                
+                    // Loop through state array and restore checked 
+                    // state for matching elements
+                    for(var i in cbstate) {
+                    var el = document.querySelector('input[name="' + i + '"]');
+                    if (el) el.checked = true;
+                    }
+                
+                    // Get all checkboxes that you want to monitor state for
+                    var cb = document.getElementsByClassName('save-cb-state');
+                
+                    // Loop through results and ...
+                    for(var i = 0; i < cb.length; i++) {
+                
+                    //bind click event handler
+                    cb[i].addEventListener('click', function(evt) {
+                        // If checkboxe is checked then save to state
+                        if (this.checked) {
+                        cbstate[this.name] = true;
+                        }
+                    
+                    // Else remove from state
+                        else if (cbstate[this.name]) {
+                        delete cbstate[this.name];
+                        }
+                    
+                    // Persist state
+                        localStorage.CBState = JSON.stringify(cbstate);
+                    });
+                    }
+                });
+            })();
+
+            function myFunction() {
+            // Get the checkbox
+                var checkBox = document.getElementById("myCheck");
+
+                // If the checkbox is checked, display the output text
+                if (checkBox.checked == true){
+                    checkBox.value = "On";
+                } else {
+                    checkBox.value = "Of";
+                }
+            }
+
             var slide = document.getElementById("myRange");
             var output = document.getElementById("demo");
             output.innerHTML = slide.value;

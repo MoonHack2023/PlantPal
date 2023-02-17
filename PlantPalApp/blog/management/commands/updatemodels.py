@@ -1,5 +1,5 @@
 # import sqlite3
-from blog.models import temp, humidity, co2, tvoc, light, avglight, Leaderboard, User
+from blog.models import temp, humidity, co2, tvoc, light, avglight, Leaderboard, User, airVelocity
 from django.core.management.base import BaseCommand
 import datetime
 import time
@@ -42,6 +42,7 @@ class Command(BaseCommand):
             devices = ["HACK1", "HACK2","HACK3", "HACK4", "HACK5", "HACK6"]
             if len(th)> 0:
                 splitth = th.split(",")
+                # d = splitth[-1]
                 for d in devices:
                     # tmp_var = temp(temp=splitth[0], device_id=splitth[-1])
                     # hum_var = humidity(humidity=splitth[1], device_id=splitth[-1])
@@ -55,6 +56,7 @@ class Command(BaseCommand):
                     co_var = co2(co2=splitth[3], device_id=d)
                     light_var = light(red=splitth[4], orange=splitth[5], yellow=splitth[6], green=splitth[7], blue=splitth[8], violet=splitth[9], device_id=d)
                     avglight_var = avglight(intensity=splitth[10], device_id=d)
+                    airvelo_var = airVelocity(velocity=splitth[11], device_id=d)
                     # print("Before change map_info:",humidity.objects.all().values())
                     tmp_var.save()
                     hum_var.save()
@@ -62,6 +64,7 @@ class Command(BaseCommand):
                     co_var.save()
                     light_var.save()
                     avglight_var.save()
+                    airvelo_var.save()
                 time.sleep(5)
             # print("after change:",humidity.objects.all().values())
 

@@ -176,8 +176,8 @@ $(document).ready(function(){
                 label: 'Air Velocity',
                 data: [{%for datav in qsv%}{{datav.velocity}},{%endfor%}],
                 fill: false,
-                backgroundColor: 'rgba(211, 161, 255,1)',
-                borderColor: 'rgba(211, 161, 255,1)',
+                backgroundColor: 'rgba(255, 135, 31, 1)',
+                borderColor: 'rgba(255, 135, 31, 1)',
                 tension: 0.3
             }
         ]},
@@ -282,6 +282,10 @@ $(document).ready(function(){
         <canvas id="CO2Chart" width="400" height="200"></canvas>  
     </div>
 </div>
+<div class="row">
+    <canvas id="veloChart" width="400" height="100"></canvas> 
+</div>
+
 
 <script>
     window.setInterval('refresh()', 5000); 	// Call a function every 10000 milliseconds (OR 10 seconds).

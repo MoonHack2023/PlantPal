@@ -1,17 +1,15 @@
-import random
+import paho.mqtt.client as mqtt
 from paho.mqtt import client as mqtt_client
-import ssl
+import random
 
-broker = 'broker.emqx.io'
-# broker = 'test.mosquitto.org'
-port = 1883 # specific to the broker
-topic = "temperature&humidity"
-# generate client ID with pub prefix randomly
+broker = "test.mosquitto.org"
+port = 8884
 client_id = f'python-mqtt-{random.randint(0, 100)}'
-print(client_id)
-username = 'moonhack'
-password = 'embbed'
 
+topic = "IC.embedded/MoonHack/test1"
+
+def on_message(client, userdata, message) :
+    print("Received message:{} on topic {}".format(message.payload, message.topic))
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
@@ -21,12 +19,10 @@ def connect_mqtt() -> mqtt_client:
             print("Failed to connect, return code %d\n", rc)
 
     client = mqtt_client.Client(client_id)
-    client.username_pw_set(username, password)
-    # client.tls_set(certfile=None,keyfile=None,cert_reqs=ssl.CERT_REQUIRED)
+    client.tls_set(ca_certs="mosquitto.org.crt", certfile="sub.crt",keyfile="sub.key")
     client.on_connect = on_connect
     client.connect(broker, port)
     return client
-
 
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
@@ -38,12 +34,10 @@ def subscribe(client: mqtt_client):
     client.subscribe(topic)
     client.on_message = on_message
 
-
 def run():
     client = connect_mqtt()
     subscribe(client)
     client.loop_forever()
-
 
 if __name__ == '__main__':
     run()

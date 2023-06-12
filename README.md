@@ -1,7 +1,13 @@
 # PlantPal
 
-Smart Environment Sensor for Plant Monitoring
+PlantPal is a  compact and innovative plant sensor - the ultimate solution for optimizing growing conditions for any type of fruit or plant.
+Using the 4 sensors below, 
+- Air temperature and humidity sensor (Si7021)
+- Spectral light (AS7262)
+- Gas Sensor (CCS811)
+- Air velocity sensor (D6F-V03A1)
 
+PlantPal effectively measures the surroundings of any plant in any environment.
 ## Running the web app with sensors
 
 First clear the database with `./clear.sh` or `python3 manage.py clear`

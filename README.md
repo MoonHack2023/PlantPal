@@ -7,7 +7,27 @@ Using the 4 sensors below,
 - Gas Sensor (CCS811)
 - Air velocity sensor (D6F-V03A1)
 
-PlantPal effectively measures the surroundings of any plant in any environment.
+PlantPal effectively measures the surroundings of any plant in any environment by capturing the following measurements in real-time:
+- Temperature 
+- TVOC
+- Humidity
+- CO2
+- Spectral Light 
+- Average Light Intensity 
+- Air Velocity
+
+## Key Features
+
+Extensive data-processing and an incredible user-interface make PlantPal a must for seasoned and noivce plant enthusiasts. 
+![image](https://github.com/MoonHack2023/PlantPal/assets/93931659/97fdcfdd-faa4-4ce1-a549-42f896446fd7)
+![image](https://github.com/MoonHack2023/PlantPal/assets/93931659/73c3657b-abaf-48b3-8974-25e47fe2741a)
+
+## Key Features 
+
+For a complete product overview and demonstration check out the marketing website:
+https://plantpal24.wixsite.com/plantpal
+
+
 ## Running the web app with sensors
 
 First clear the database with `./clear.sh` or `python3 manage.py clear`

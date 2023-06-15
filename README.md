@@ -2,6 +2,7 @@
 
 PlantPal is a  compact and innovative plant sensor - the ultimate solution for optimizing growing conditions for any type of fruit or plant.
 Check out the marketing website for a full product overview and demo! https://plantpal24.wixsite.com/plantpal 
+
 Using the 4 sensors below, 
 - Air temperature and humidity sensor (Si7021)
 - Spectral light (AS7262)
